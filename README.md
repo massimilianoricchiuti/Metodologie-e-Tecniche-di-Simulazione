@@ -21,21 +21,6 @@ HTML/CSS/JS puro, senza build — pronto per **GitHub Pages**.
 | `rdf/` | `domus_enrichment.ttl` (risultato finale, 8 triple), output sperimentale e report di validazione |
 | `sparql-checks/` | Query SPARQL di controllo sull'arricchimento proposto |
 
-## Stato del progetto
-
-Le pagine richieste, i nomi del team, i prompt con gli output osservati, il confronto fra modelli,
-l'arricchimento RDF e le conclusioni sono completi. Il risultato Turtle è distinto dall'output
-sperimentale dei modelli e usa soltanto risorse emerse nelle query documentate.
-
-## Pubblicare su GitHub Pages
-
-1. Nel repository, aprire **Settings → Pages**.
-2. In *Build and deployment → Source*, scegliere **Deploy from a branch**.
-3. Selezionare il branch destinato alla consegna e la cartella `/ (root)`, quindi salvare.
-
-> Le linee guida chiedono che *tutto il codice e il materiale siano pubblici su GitHub*: committate
-> anche i file `.rq` delle query e i file di testo dei prompt.
-
 ## Stato dei requisiti
 
 - [x] Homepage con titolo, abstract, team
