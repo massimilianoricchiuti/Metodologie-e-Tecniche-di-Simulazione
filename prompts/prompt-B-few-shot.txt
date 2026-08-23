@@ -1,0 +1,48 @@
+RUOLO
+Agisci come knowledge engineer RDF. Devi trasformare descrizioni testuali brevi in triple Turtle minimali, usando ArCo dove possibile e una piccola estensione locale quando il vocabolario ArCo non basta.
+
+PREFISSI DA USARE
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix l0: <https://w3id.org/italia/onto/l0/> .
+@prefix cis: <http://dati.beniculturali.it/cis/> .
+@prefix arco: <https://w3id.org/arco/ontology/arco/> .
+@prefix a-cd: <https://w3id.org/arco/ontology/context-description/> .
+@prefix domus: <https://massimilianoricchiuti.github.io/gepid-domus-chirurgo/resource/> .
+@prefix domus-onto: <https://massimilianoricchiuti.github.io/gepid-domus-chirurgo/ontology/> .
+
+ESEMPIO 1
+Input: "Il bene archeologico X proviene dal sito Y, ma nel KG la provenienza è presente solo come testo libero."
+Output:
+<https://example.org/resource/X> domus-onto:hasArchaeologicalProvenanceSite <https://example.org/resource/Y> .
+# Commento: relazione locale proposta per rendere navigabile una provenienza già attestata testualmente.
+
+ESEMPIO 2
+Input: "Un sito archeologico è connesso narrativamente a una figura storica non presente nel KG."
+Output:
+<https://example.org/resource/SiteY> domus-onto:hasAssociatedFigure domus:FiguraStoricaZ .
+domus:FiguraStoricaZ a domus-onto:HistoricalFigure ;
+  rdfs:label "Figura storica Z"@it .
+# Commento: la figura è creata nel namespace locale; non si inventa un URI ArCo.
+
+ESEMPIO 3
+Input: "Un insieme di reperti è noto come gruppo unitario, ma i singoli reperti non sono enumerati nel KG."
+Output:
+<https://example.org/resource/SiteY> domus-onto:hasFindGroup domus:GruppoReperti .
+domus:GruppoReperti a domus-onto:FindGroup ;
+  rdfs:label "gruppo di reperti"@it .
+# Commento: si modella il gruppo, non i singoli oggetti non verificati.
+
+COMPITO REALE
+Trasforma in Turtle il seguente caso:
+- Il sito ArCo https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8 rappresenta la Domus del Chirurgo.
+- Il bene https://w3id.org/arco/resource/ArchaeologicalProperty/0800675608 contiene nel campo historicalInformation un riferimento testuale alla Domus.
+- Il gap riguarda il mancato collegamento RDF esplicito tra bene e sito, e la mancata rappresentazione come risorse RDF di Eutyches, del corredo di strumenti chirurgici e del tema della chirurgia romana.
+
+VINCOLI
+- Produci Turtle valido.
+- Se introduci proprietà o classi locali, dichiarale con rdfs:label, rdfs:comment, rdfs:domain e rdfs:range quando possibile.
+- Separa le triple in: accettate, suggerite, da verificare.
+- Non usare literal come oggetto quando serve una risorsa.
+- Non dichiarare come certo ciò che è solo narrativo o da verificare.

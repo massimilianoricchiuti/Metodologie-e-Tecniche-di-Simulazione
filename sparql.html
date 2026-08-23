@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sei query SPARQL sul Knowledge Graph ArCo per analizzare la rappresentazione della Domus del Chirurgo, del corredo chirurgico e del medico Eutyches.">
+  <title>Progetto GEPID — Query SPARQL</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Salta al contenuto</a>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html"><span class="mark">GEPID</span><span class="sub">Progetto MTS</span></a>
+      <button class="nav-toggle" type="button" aria-label="Apri menu">☰</button>
+      <nav class="nav" aria-label="Navigazione principale">
+        <a href="index.html">Home</a>
+        <a href="methodology.html">Metodologia</a>
+        <a href="sparql.html">SPARQL</a>
+        <a href="prompts.html">Prompt e LLM</a>
+        <a href="rdf.html" aria-label="Arricchimento RDF">RDF</a>
+        <a href="conclusions.html">Conclusioni</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="hero">
+      <p class="eyebrow">Query SPARQL · ArCo · Analisi del gap</p>
+      <h1><span class="accent">Alla ricerca del medico e del corredo chirurgico</span></h1>
+      <p class="lede">Sei query, tutte condotte sul dataset <a href="https://dati.cultura.gov.it/sparql" target="_blank" rel="noopener">ArCo</a>, per verificare se il celebre corredo di strumenti chirurgici e la figura del medico Eutyches siano rappresentati nel Knowledge Graph come risorse a s&eacute; stanti, oppure solo come menzione testuale. Il percorso parte dal ritrovamento del sito (<a href="#q1">Q1</a>) e ne mappa tutte le relazioni dirette (<a href="#q2">Q2</a>), scoprendo che conducono, attraverso nodi intermedi, soltanto a cinque beni archeologici minori &mdash; un mosaico, un bacile, un capitello, una vasca, un frammento di statua &mdash; nessuno riconducibile alla chirurgia (<a href="#q3">Q3</a>). Allargando la ricerca a tutto il grafo emergono corrispondenze lessicali eterogenee &mdash; una raccolta veterinaria, una risorsa fotografica, nodi etichettati «bisturi» e molte occorrenze ambigue di «scalpello» &mdash; ma nessun URI attribuibile al corredo della Domus (<a href="#q4">Q4</a>, <a href="#q5">Q5</a>). La ricerca di Eutyches, infine, restituisce soltanto un titolo omonimo e non pertinente: non emerge come persona n&eacute; in relazione alla Domus (<a href="#q6">Q6</a>).</p>
+      <p class="lede">Il risultato complessivo conferma e rafforza il gap individuato nel resto del progetto: il grafo dispone di categorie e termini pertinenti, ma le query non individuano una risorsa catalografica attribuibile al corredo della Domus del Chirurgo.</p>
+      <div class="pills" id="query-index" aria-label="Indice delle query">
+        <a class="pill" href="#q1">Q1</a>
+        <a class="pill" href="#q2">Q2</a>
+        <a class="pill" href="#q3">Q3</a>
+        <a class="pill" href="#q4">Q4</a>
+        <a class="pill" href="#q5">Q5</a>
+        <a class="pill" href="#q6">Q6</a>
+      </div>
+    </section>
+
+    <section id="q1">
+      <h2><span class="num">Q1</span>Ricerca per etichetta e tipo</h2>
+      <hr class="rule">
+      <div class="kwbox">
+        <p class="why">La query ha lo scopo di individuare nel Knowledge Graph le entit&agrave; associate alla Domus del Chirurgo senza conoscerne preventivamente l&rsquo;IRI. La ricerca viene effettuata attraverso la propriet&agrave; <code>rdfs:label</code>, filtrando le etichette mediante una espressione regolare case-insensitive. Per ogni risorsa individuata vengono recuperati l&rsquo;IRI, l&rsquo;etichetta e il relativo <code>rdf:type</code>. L&rsquo;uso di <code>DISTINCT</code> consente inoltre di eliminare eventuali risultati duplicati. La query rappresenta quindi una prima fase esplorativa del Knowledge Graph, finalizzata all&rsquo;identificazione della risorsa e delle classi utilizzate per descriverla.</p>
+      </div>
+      <figure class="code">
+        <figcaption><a href="queries/query-eu-01-ricerca-nodi.rq">query-eu-01-ricerca-nodi.rq</a> <span class="tag">DISTINCT &middot; FILTER &middot; REGEX</span></figcaption>
+<pre><code><span class="pre">PREFIX</span> rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
+<span class="kw">SELECT</span> <span class="kw">DISTINCT</span> <span class="var">?entity</span> <span class="var">?label</span> <span class="var">?type</span> <span class="kw">WHERE</span> {
+  <span class="var">?entity</span> rdfs:label <span class="var">?label</span> ;
+          a <span class="var">?type</span> .
+  <span class="kw">FILTER</span> <span class="kw">regex</span>(<span class="var">?label</span>, <span class="str">"domus del chirurgo"</span>, <span class="str">"i"</span>)
+}</code></pre>
+      </figure>
+      <a class="runlink" href="https://dati.cultura.gov.it/sparql?query=PREFIX%20rdfs%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23%3E%0ASELECT%20DISTINCT%20%3Fentity%20%3Flabel%20%3Ftype%20WHERE%20%7B%0A%20%20%3Fentity%20rdfs%3Alabel%20%3Flabel%20%3B%0A%20%20%20%20%20%20%20%20%20%20a%20%3Ftype%20.%0A%20%20FILTER%20regex%28%3Flabel%2C%20%22domus%20del%20chirurgo%22%2C%20%22i%22%29%0A%7D&format=text%2Fhtml" target="_blank" rel="noopener">Esegui query</a>
+      <div class="result-sample" aria-label="Estratto dei risultati della query Q1">
+        <div class="result-sample-head">
+          <span class="lbl">Estratto dei risultati effettivi</span>
+          <span class="result-count">3 di 6 righe</span>
+        </div>
+        <p class="small">Tre risorse semanticamente diverse, selezionate per mostrare la pluralità dei nodi restituiti e identificare il nodo ArCo usato nelle query successive.</p>
+        <div class="table-wrap">
+          <table class="results-table" aria-label="Righe selezionate dall'output Q1">
+            <thead><tr><th scope="col">entity</th><th scope="col">label</th><th scope="col">type</th></tr></thead>
+            <tbody>
+          <tr><td class="result-uri"><a href="http://dati.beniculturali.it/mibact/luoghi/resource/CreativeWork/2547_" target="_blank" rel="noopener"><code>http://dati.beniculturali.it/mibact/luoghi/resource/CreativeWork/2547_</code></a></td><td class="result-value"><code>&quot;Rimini - Domus del Chirurgo&quot;</code></td><td class="result-uri"><a href="http://dati.beniculturali.it/cis/CreativeWork" target="_blank" rel="noopener"><code>http://dati.beniculturali.it/cis/CreativeWork</code></a></td></tr>
+          <tr><td class="result-uri"><a href="http://dati.beniculturali.it/mibact/luoghi/resource/CulturalInstituteOrSite/102284" target="_blank" rel="noopener"><code>http://dati.beniculturali.it/mibact/luoghi/resource/CulturalInstituteOrSite/102284</code></a></td><td class="result-value"><code>&quot;Domus del Chirurgo&quot;@it</code></td><td class="result-uri"><a href="http://dati.beniculturali.it/cis/CulturalInstituteOrSite" target="_blank" rel="noopener"><code>http://dati.beniculturali.it/cis/CulturalInstituteOrSite</code></a></td></tr>
+          <tr><td class="result-uri"><a href="https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8" target="_blank" rel="noopener"><code>https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8</code></a></td><td class="result-value"><code>&quot;Domus del Chirurgo&quot;</code></td><td class="result-uri"><a href="http://dati.beniculturali.it/cis/Site" target="_blank" rel="noopener"><code>http://dati.beniculturali.it/cis/Site</code></a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="rescomment">
+        <span class="lbl">Commento ai risultati</span>
+        <p>La query restituisce <strong>sei righe</strong> il cui <code>rdfs:label</code> contiene l'espressione «Domus del Chirurgo». Non emerge una sola risorsa, ma una rappresentazione distribuita fra un <code>cis:CreativeWork</code>, un <code>cis:CulturalInstituteOrSite</code>, la relativa sede, un indirizzo, un ruolo amministrativo e il nodo ArCo di tipo <code>cis:Site</code>. L'estratto mostra tre di queste forme e documenta che la corrispondenza lessicale non equivale ancora all'identificazione del nodo da interrogare.</p>
+        <p>Il nodo <code>https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8</code> è l'unica delle sei risorse appartenente al namespace <strong>ArCo</strong>. Per questo viene assunto come ancora delle query successive. Il risultato sostiene quindi la fase di <em>vocabulary discovery</em>, ma non autorizza a fondere automaticamente entità che hanno funzioni e tipi differenti.</p>
+      </div>
+      <p class="back-link"><a href="#query-index" aria-label="Torna all'indice delle query">↑ Torna all'indice delle query</a></p>
+    </section>
+
+    <section id="q2">
+      <h2><span class="num">Q2</span>Vista d'insieme: cosa entra ed esce dal sito ArCo</h2>
+      <hr class="rule">
+      <div class="kwbox">
+        <p class="why">Vista d'insieme sul nodo ArCo della Domus: il primo blocco della <code>UNION</code> recupera le triple in cui il sito &egrave; <em>soggetto</em> (ci&ograve; che dichiara di s&eacute;), il secondo quelle in cui &egrave; <em>oggetto</em> (chi lo referenzia). <code>BIND</code> etichetta ciascuna riga con la direzione, cos&igrave; da vedere in un'unica tabella sia il &laquo;ritratto&raquo; del sito sia i suoi collegamenti in entrata, utile come punto di partenza prima di scendere nel dettaglio delle query successive.</p>
+      </div>
+      <figure class="code">
+        <figcaption><a href="queries/query-eu-02-entranti-uscenti.rq">query-eu-02-entranti-uscenti.rq</a> <span class="tag">DISTINCT &middot; UNION &middot; BIND &middot; ORDER BY &middot; LIMIT</span></figcaption>
+<pre><code><span class="pre">PREFIX</span> rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
+<span class="kw">SELECT</span> <span class="kw">DISTINCT</span> <span class="var">?direction</span> <span class="var">?prop</span> <span class="var">?other</span> <span class="kw">WHERE</span> {
+  { &lt;https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8&gt; <span class="var">?prop</span> <span class="var">?other</span> .
+    <span class="kw">BIND</span>(<span class="str">"uscente"</span> <span class="kw">AS</span> <span class="var">?direction</span>) }
+  <span class="kw">UNION</span>
+  { <span class="var">?other</span> <span class="var">?prop</span> &lt;https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8&gt; .
+    <span class="kw">BIND</span>(<span class="str">"entrante"</span> <span class="kw">AS</span> <span class="var">?direction</span>) }
+}
+<span class="kw">ORDER BY</span> <span class="var">?direction</span> <span class="kw">LIMIT</span> 200</code></pre>
+      </figure>
+      <a class="runlink" href="https://dati.cultura.gov.it/sparql?query=PREFIX%20rdfs%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23%3E%0ASELECT%20DISTINCT%20%3Fdirection%20%3Fprop%20%3Fother%20WHERE%20%7B%0A%20%20%7B%20%3Chttps%3A%2F%2Fw3id.org%2Farco%2Fresource%2FSite%2F341671000c872aa799b1e99ae08ca1e8%3E%20%3Fprop%20%3Fother%20.%0A%20%20%20%20BIND%28%22uscente%22%20AS%20%3Fdirection%29%20%7D%0A%20%20UNION%0A%20%20%7B%20%3Fother%20%3Fprop%20%3Chttps%3A%2F%2Fw3id.org%2Farco%2Fresource%2FSite%2F341671000c872aa799b1e99ae08ca1e8%3E%20.%0A%20%20%20%20BIND%28%22entrante%22%20AS%20%3Fdirection%29%20%7D%0A%7D%0AORDER%20BY%20%3Fdirection%20LIMIT%20200&format=text%2Fhtml" target="_blank" rel="noopener">Esegui query</a>
+      <div class="result-sample" aria-label="Estratto dei risultati della query Q2">
+        <div class="result-sample-head">
+          <span class="lbl">Estratto dei risultati effettivi</span>
+          <span class="result-count">3 di 12 righe</span>
+        </div>
+        <p class="small">Un allineamento, un collegamento di localizzazione in entrata e una proprietà descrittiva in uscita: le tre righe rendono visibili le strutture commentate sotto.</p>
+        <div class="table-wrap">
+          <table class="results-table" aria-label="Righe selezionate dall'output Q2">
+            <thead><tr><th scope="col">direction</th><th scope="col">prop</th><th scope="col">other</th></tr></thead>
+            <tbody>
+          <tr><td class="result-value"><code>entrante</code></td><td class="result-uri"><a href="http://www.w3.org/2002/07/owl#sameAs" target="_blank" rel="noopener"><code>http://www.w3.org/2002/07/owl#sameAs</code></a></td><td class="result-uri"><a href="http://dati.beniculturali.it/mibact/luoghi/resource/Site/Sede_di_102284" target="_blank" rel="noopener"><code>http://dati.beniculturali.it/mibact/luoghi/resource/Site/Sede_di_102284</code></a></td></tr>
+          <tr><td class="result-value"><code>entrante</code></td><td class="result-uri"><a href="https://w3id.org/arco/ontology/location/atSite" target="_blank" rel="noopener"><code>https://w3id.org/arco/ontology/location/atSite</code></a></td><td class="result-uri"><a href="https://w3id.org/arco/resource/TimeIndexedTypedLocation/0800675608-alternative-1" target="_blank" rel="noopener"><code>https://w3id.org/arco/resource/TimeIndexedTypedLocation/0800675608-alternative-1</code></a></td></tr>
+          <tr><td class="result-value"><code>uscente</code></td><td class="result-uri"><a href="http://dati.beniculturali.it/cis/siteAddress" target="_blank" rel="noopener"><code>http://dati.beniculturali.it/cis/siteAddress</code></a></td><td class="result-uri"><a href="https://w3id.org/arco/resource/Address/d70eed845aa6f8b4f87418892eb5031a" target="_blank" rel="noopener"><code>https://w3id.org/arco/resource/Address/d70eed845aa6f8b4f87418892eb5031a</code></a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="rescomment">
+        <span class="lbl">Commento ai risultati</span>
+        <p>Rispetto a <a href="#q1">Q1</a>, che aveva trovato le entit&agrave; per nome senza esplorarne le relazioni, questa query rivela per la prima volta la struttura del sito. Sul lato <strong>uscente</strong>: solo cinque propriet&agrave; (tipo, etichetta, indirizzo, tipo di sito, nome) &mdash; il nodo &egrave; un &laquo;ritratto&raquo; minimale del sito. Sul lato <strong>entrante</strong> emergono due fatti nuovi: due collegamenti <code>owl:sameAs</code> verso altrettanti record del dataset Luoghi (<code>Sede_di_102284</code> e <code>Sede_di_104603</code>) &mdash; segno che la Domus ha pi&ugrave; di un URI nel grafo del patrimonio &mdash; e cinque nodi <code>TimeIndexedTypedLocation</code> collegati tramite <code>atSite</code>. Questi ultimi sono per&ograve; nodi <em>intermedi</em> di localizzazione, non i beni archeologici veri e propri: per risalire ai beni che li usano serve un passo ulteriore (la propriet&agrave; <code>hasTimeIndexedTypedLocation</code>), che <a href="#q3">Q3</a> percorrer&agrave; esplicitamente.</p>
+        <p>Tra le entit&agrave; rivelate, nessuna &egrave; una persona n&eacute; contiene riferimenti al corredo chirurgico. La query mostra, in una forma sintetica e leggibile in un colpo d'occhio, che l'intero perimetro di relazioni dirette del sito ArCo si esaurisce in questi dodici collegamenti &mdash; nessuno dei quali riconducibile a Eutyches o al suo strumentario. I cinque nodi di localizzazione appena emersi conducono, con un passo in pi&ugrave;, ai beni archeologici che <a href="#q3">Q3</a> individuer&agrave; esplicitamente.</p>
+      </div>
+      <p class="back-link"><a href="#query-index" aria-label="Torna all'indice delle query">↑ Torna all'indice delle query</a></p>
+    </section>
+
+    <section id="q3">
+      <h2><span class="num">Q3</span>Beni archeologici collegati al sito ArCo</h2>
+      <hr class="rule">
+      <div class="kwbox">
+        <p class="why">La query ricerca i beni archeologici collegati semanticamente alla Domus del Chirurgo attraverso il modello di localizzazione adottato da ArCo. Vengono selezionate le risorse di tipo <code>ArchaeologicalProperty</code> associate a una <code>TimeIndexedTypedLocation</code> che, tramite la propriet&agrave; <code>atSite</code>, fa riferimento al nodo ArCo della Domus. Il filtro sulla lingua limita i risultati alle etichette italiane o prive di indicazione linguistica.</p>
+      </div>
+      <figure class="code">
+        <figcaption><a href="queries/query-eu-03-beni-arco-filtrati.rq">query-eu-03-beni-arco-filtrati.rq</a> <span class="tag">DISTINCT &middot; FILTER &middot; LANG &middot; LIMIT</span></figcaption>
+<pre><code><span class="pre">PREFIX</span> rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
+<span class="pre">PREFIX</span> arco: &lt;https://w3id.org/arco/ontology/arco/&gt;
+<span class="pre">PREFIX</span> a-loc: &lt;https://w3id.org/arco/ontology/location/&gt;
+<span class="kw">SELECT</span> <span class="kw">DISTINCT</span> <span class="var">?entity</span> <span class="var">?label</span> <span class="var">?location</span>
+<span class="kw">WHERE</span> {
+  <span class="var">?entity</span> a arco:ArchaeologicalProperty ;
+          a-loc:hasTimeIndexedTypedLocation <span class="var">?location</span> ;
+          rdfs:label <span class="var">?label</span> .
+  <span class="var">?location</span> a-loc:atSite
+    &lt;https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8&gt; .
+  <span class="kw">FILTER</span> (<span class="kw">LANG</span>(<span class="var">?label</span>) = <span class="str">"it"</span> || <span class="kw">LANG</span>(<span class="var">?label</span>) = <span class="str">""</span>)
+}
+<span class="kw">LIMIT</span> 50</code></pre>
+      </figure>
+      <a class="runlink" href="https://dati.cultura.gov.it/sparql?query=PREFIX%20rdfs%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23%3E%0APREFIX%20arco%3A%20%3Chttps%3A%2F%2Fw3id.org%2Farco%2Fontology%2Farco%2F%3E%0APREFIX%20a-loc%3A%20%3Chttps%3A%2F%2Fw3id.org%2Farco%2Fontology%2Flocation%2F%3E%0ASELECT%20DISTINCT%20%3Fentity%20%3Flabel%20%3Flocation%0AWHERE%20%7B%0A%20%20%3Fentity%20a%20arco%3AArchaeologicalProperty%20%3B%0A%20%20%20%20%20%20%20%20%20%20a-loc%3AhasTimeIndexedTypedLocation%20%3Flocation%20%3B%0A%20%20%20%20%20%20%20%20%20%20rdfs%3Alabel%20%3Flabel%20.%0A%20%20%3Flocation%20a-loc%3AatSite%0A%20%20%20%20%3Chttps%3A%2F%2Fw3id.org%2Farco%2Fresource%2FSite%2F341671000c872aa799b1e99ae08ca1e8%3E%20.%0A%20%20FILTER%20%28LANG%28%3Flabel%29%20%3D%20%22it%22%20%7C%7C%20LANG%28%3Flabel%29%20%3D%20%22%22%29%0A%7D%0ALIMIT%2050&format=text%2Fhtml" target="_blank" rel="noopener">Esegui query</a>
+      <div class="result-sample" aria-label="Estratto dei risultati della query Q3">
+        <div class="result-sample-head">
+          <span class="lbl">Estratto dei risultati effettivi</span>
+          <span class="result-count">3 di 5 righe</span>
+        </div>
+        <p class="small">Tre dei cinque beni raggiunti attraverso il nodo intermedio di localizzazione; nessuna etichetta riguarda il corredo chirurgico.</p>
+        <div class="table-wrap">
+          <table class="results-table" aria-label="Righe selezionate dall'output Q3">
+            <thead><tr><th scope="col">entity</th><th scope="col">label</th><th scope="col">location</th></tr></thead>
+            <tbody>
+          <tr><td class="result-uri"><a href="https://w3id.org/arco/resource/ArchaeologicalProperty/0800675608" target="_blank" rel="noopener"><code>https://w3id.org/arco/resource/ArchaeologicalProperty/0800675608</code></a></td><td class="result-value"><code>&quot;mosaico (metà/ metà II-III)&quot;@it</code></td><td class="result-uri"><a href="https://w3id.org/arco/resource/TimeIndexedTypedLocation/0800675608-alternative-1" target="_blank" rel="noopener"><code>https://w3id.org/arco/resource/TimeIndexedTypedLocation/0800675608-alternative-1</code></a></td></tr>
+          <tr><td class="result-uri"><a href="https://w3id.org/arco/resource/ArchaeologicalProperty/0800675610" target="_blank" rel="noopener"><code>https://w3id.org/arco/resource/ArchaeologicalProperty/0800675610</code></a></td><td class="result-value"><code>&quot;capitello corinzio (opera parietale) (metà/ metà II-III)&quot;@it</code></td><td class="result-uri"><a href="https://w3id.org/arco/resource/TimeIndexedTypedLocation/0800675610-alternative-1" target="_blank" rel="noopener"><code>https://w3id.org/arco/resource/TimeIndexedTypedLocation/0800675610-alternative-1</code></a></td></tr>
+          <tr><td class="result-uri"><a href="https://w3id.org/arco/resource/ArchaeologicalProperty/0800675612" target="_blank" rel="noopener"><code>https://w3id.org/arco/resource/ArchaeologicalProperty/0800675612</code></a></td><td class="result-value"><code>&quot;Ermarco (statua/ maschile, piede) (prima metà III)&quot;@it</code></td><td class="result-uri"><a href="https://w3id.org/arco/resource/TimeIndexedTypedLocation/0800675612-alternative-1" target="_blank" rel="noopener"><code>https://w3id.org/arco/resource/TimeIndexedTypedLocation/0800675612-alternative-1</code></a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="rescomment">
+        <span class="lbl">Commento ai risultati</span>
+        <p>La query individua cinque risorse di tipo <code>arco:ArchaeologicalProperty</code> formalmente associate alla Domus del Chirurgo attraverso il modello di localizzazione di ArCo. Il collegamento non &egrave; diretto, ma avviene mediante una risorsa <code>TimeIndexedTypedLocation</code>: ciascun bene &egrave; collegato alla propria localizzazione tramite <code>hasTimeIndexedTypedLocation</code>, mentre quest&rsquo;ultima fa riferimento alla Domus mediante <code>atSite</code>. I risultati comprendono un mosaico, un bacile, un capitello corinzio, una vasca e un frammento di statua di Ermarco. Non emergono invece, attraverso questo percorso semantico, risorse riferibili al celebre corredo chirurgico della Domus.</p>
+      </div>
+      <p class="back-link"><a href="#query-index" aria-label="Torna all'indice delle query">↑ Torna all'indice delle query</a></p>
+    </section>
+
+    <section id="q4">
+      <h2><span class="num">Q4</span>Ricerca globale del corredo chirurgico</h2>
+      <hr class="rule">
+      <div class="kwbox">
+        <p class="why">Le query precedenti hanno mostrato che il sito ArCo della Domus non ha alcun collegamento diretto n&eacute; al corredo chirurgico n&eacute; ai suoi strumenti (<a href="#q2">Q2</a>), e che i cinque beni archeologici raggiungibili tramite le sue localizzazioni non hanno nulla a che vedere con la chirurgia (<a href="#q3">Q3</a>). Questa query cambia prospettiva: invece di partire dal sito, cerca in tutto il Knowledge Graph, senza alcun vincolo, qualunque risorsa la cui etichetta richiami il corredo chirurgico (strumentario, bisturi, specilli, scalpelli). L'obiettivo &egrave; capire se un simile corredo esista comunque da qualche parte nel grafo, indipendentemente dal fatto che risulti o meno collegato alla Domus.</p>
+      </div>
+      <figure class="code">
+        <figcaption><a href="queries/query-eu-04-ricerca-corredo.rq">query-eu-04-ricerca-corredo.rq</a> <span class="tag">DISTINCT &middot; FILTER &middot; REGEX &middot; LIMIT</span></figcaption>
+<pre><code><span class="pre">PREFIX</span> rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
+<span class="kw">SELECT</span> <span class="kw">DISTINCT</span> <span class="var">?entity</span> <span class="var">?label</span> <span class="kw">WHERE</span> {
+  <span class="var">?entity</span> rdfs:label <span class="var">?label</span> .
+  <span class="kw">FILTER</span> <span class="kw">regex</span>(<span class="var">?label</span>, <span class="str">"corredo chirurgico|strumentario chirurgico|strumenti chirurgici|bisturi|specillo|scalpello"</span>, <span class="str">"i"</span>)
+}
+<span class="kw">LIMIT</span> 100</code></pre>
+      </figure>
+      <a class="runlink" href="https://dati.cultura.gov.it/sparql?query=PREFIX%20rdfs%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23%3E%0ASELECT%20DISTINCT%20%3Fentity%20%3Flabel%20WHERE%20%7B%0A%20%20%3Fentity%20rdfs%3Alabel%20%3Flabel%20.%0A%20%20FILTER%20regex%28%3Flabel%2C%20%22corredo%20chirurgico%7Cstrumentario%20chirurgico%7Cstrumenti%20chirurgici%7Cbisturi%7Cspecillo%7Cscalpello%22%2C%20%22i%22%29%0A%7D%0ALIMIT%20100&format=text%2Fhtml" target="_blank" rel="noopener">Esegui query</a>
+      <div class="result-sample" aria-label="Estratto dei risultati della query Q4">
+        <div class="result-sample-head">
+          <span class="lbl">Estratto dei risultati effettivi</span>
+          <span class="result-count">3 di 100 righe · LIMIT raggiunto</span>
+        </div>
+        <p class="small">L'estratto mostra la natura eterogenea delle corrispondenze lessicali: un istituto, una risorsa fotografica e un nodo di tipo. Il raggiungimento del limite impedisce di considerare l'output esaustivo.</p>
+        <div class="table-wrap">
+          <table class="results-table" aria-label="Righe selezionate dall'output Q4">
+            <thead><tr><th scope="col">entity</th><th scope="col">label</th></tr></thead>
+            <tbody>
+          <tr><td class="result-uri"><a href="http://dati.beniculturali.it/mibact/luoghi/resource/CulturalInstituteOrSite/102008" target="_blank" rel="noopener"><code>http://dati.beniculturali.it/mibact/luoghi/resource/CulturalInstituteOrSite/102008</code></a></td><td class="result-value"><code>&quot;Raccolta di antichi strumenti chirurgici veterinari&quot;@it</code></td></tr>
+          <tr><td class="result-uri"><a href="http://dati.beniculturali.it/iccd/fotografico/resource/CulturalProperty/IT-ICCD-PHOTO-0112-007943" target="_blank" rel="noopener"><code>http://dati.beniculturali.it/iccd/fotografico/resource/CulturalProperty/IT-ICCD-PHOTO-0112-007943</code></a></td><td class="result-value"><code>&quot;Strumenti chirurgici&quot;</code></td></tr>
+          <tr><td class="result-uri"><a href="https://w3id.org/arco/resource/CulturalPropertyType/fe6b407c4abb2c017c643a47349e34fb" target="_blank" rel="noopener"><code>https://w3id.org/arco/resource/CulturalPropertyType/fe6b407c4abb2c017c643a47349e34fb</code></a></td><td class="result-value"><code>&quot;bisturi&quot;@it</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="rescomment">
+        <span class="lbl">Commento ai risultati</span>
+        <p>La ricerca globale raggiunge il <strong>LIMIT di 100 righe</strong> e restituisce corrispondenze lessicali eterogenee: una raccolta di strumenti chirurgici veterinari e i suoi nodi descrittivi, una risorsa fotografica denominata «Strumenti chirurgici», nodi di vocabolario o di tipo etichettati «bisturi» e «specillo», oltre a numerose risorse etichettate «scalpello». L'output dimostra che il lessico chirurgico è presente nel Knowledge Graph, ma evidenzia anche un rumore considerevole.</p>
+        <p>Nessuna delle righe selezionate identifica nel proprio URI o nella propria etichetta il corredo della Domus del Chirurgo. La query, essendo lessicale, non verifica da sola ogni possibile relazione indiretta: il suo esito deve essere letto insieme a <a href="#q2">Q2</a> e <a href="#q3">Q3</a>. La conclusione prudente è che questa ricerca <strong>non individua</strong> un URI attribuibile al corredo specifico della Domus.</p>
+      </div>
+      <p class="back-link"><a href="#query-index" aria-label="Torna all'indice delle query">↑ Torna all'indice delle query</a></p>
+    </section>
+
+    <section id="q5">
+      <h2><span class="num">Q5</span>Corredo chirurgico ristretto al namespace ArCo</h2>
+      <hr class="rule">
+      <div class="kwbox">
+        <p class="why">La ricerca globale (<a href="#q4">Q4</a>) intercettava anche risorse esterne ad ArCo, come le biblioteche universitarie del dataset MiBACT&ndash;ICCU. Questa query restringe il campo aggiungendo un secondo <code>FILTER</code>, basato su <code>STRSTARTS</code>: accetta solo le entit&agrave; il cui URI inizia con il namespace di ArCo (<code>w3id.org/arco/resource/</code>). In questo modo il rumore dei falsi positivi lessicali provenienti da altri dataset viene eliminato, e la ricerca testuale si applica solo alle risorse effettivamente catalogate in ArCo.</p>
+      </div>
+      <figure class="code">
+        <figcaption><a href="queries/query-eu-05-corredo-arco.rq">query-eu-05-corredo-arco.rq</a> <span class="tag">DISTINCT &middot; FILTER &middot; STRSTARTS &middot; STR &middot; REGEX &middot; LIMIT</span></figcaption>
+<pre><code><span class="pre">PREFIX</span> rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
+<span class="kw">SELECT</span> <span class="kw">DISTINCT</span> <span class="var">?entity</span> <span class="var">?label</span> <span class="kw">WHERE</span> {
+  <span class="var">?entity</span> rdfs:label <span class="var">?label</span> .
+  <span class="kw">FILTER</span> <span class="kw">STRSTARTS</span>(<span class="kw">STR</span>(<span class="var">?entity</span>), <span class="str">"https://w3id.org/arco/resource/"</span>)
+  <span class="kw">FILTER</span> <span class="kw">regex</span>(<span class="var">?label</span>, <span class="str">"chirurgico|strumentario|bisturi|specillo|scalpello"</span>, <span class="str">"i"</span>)
+}
+<span class="kw">LIMIT</span> 100</code></pre>
+      </figure>
+      <a class="runlink" href="https://dati.cultura.gov.it/sparql?query=PREFIX%20rdfs%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23%3E%0ASELECT%20DISTINCT%20%3Fentity%20%3Flabel%20WHERE%20%7B%0A%20%20%3Fentity%20rdfs%3Alabel%20%3Flabel%20.%0A%20%20FILTER%20STRSTARTS%28STR%28%3Fentity%29%2C%20%22https%3A%2F%2Fw3id.org%2Farco%2Fresource%2F%22%29%0A%20%20FILTER%20regex%28%3Flabel%2C%20%22chirurgico%7Cstrumentario%7Cbisturi%7Cspecillo%7Cscalpello%22%2C%20%22i%22%29%0A%7D%0ALIMIT%20100&format=text%2Fhtml" target="_blank" rel="noopener">Esegui query</a>
+      <div class="result-sample" aria-label="Estratto dei risultati della query Q5">
+        <div class="result-sample-head">
+          <span class="lbl">Estratto dei risultati effettivi</span>
+          <span class="result-count">3 di 100 righe · LIMIT raggiunto</span>
+        </div>
+        <p class="small">Due risorse di tipo etichettate «bisturi» e un bene etnoantropologico etichettato «scalpello»: il filtro sul namespace non elimina l'ambiguità lessicale.</p>
+        <div class="table-wrap">
+          <table class="results-table" aria-label="Righe selezionate dall'output Q5">
+            <thead><tr><th scope="col">entity</th><th scope="col">label</th></tr></thead>
+            <tbody>
+          <tr><td class="result-uri"><a href="https://w3id.org/arco/resource/CulturalPropertyType/fe6b407c4abb2c017c643a47349e34fb" target="_blank" rel="noopener"><code>https://w3id.org/arco/resource/CulturalPropertyType/fe6b407c4abb2c017c643a47349e34fb</code></a></td><td class="result-value"><code>&quot;bisturi&quot;@it</code></td></tr>
+          <tr><td class="result-uri"><a href="https://w3id.org/arco/resource/Lombardia/CulturalPropertyType/fe6b407c4abb2c017c643a47349e34fb" target="_blank" rel="noopener"><code>https://w3id.org/arco/resource/Lombardia/CulturalPropertyType/fe6b407c4abb2c017c643a47349e34fb</code></a></td><td class="result-value"><code>&quot;bisturi&quot;@it</code></td></tr>
+          <tr><td class="result-uri"><a href="https://w3id.org/arco/resource/Lombardia/DemoEthnoAnthropologicalHeritage/LO540-00273_R03" target="_blank" rel="noopener"><code>https://w3id.org/arco/resource/Lombardia/DemoEthnoAnthropologicalHeritage/LO540-00273_R03</code></a></td><td class="result-value"><code>&quot;scalpello&quot;@it</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="rescomment">
+        <span class="lbl">Commento ai risultati</span>
+        <p>Il filtro <code>STRSTARTS</code> elimina le risorse esterne al namespace ArCo, ma l'output raggiunge nuovamente il <strong>LIMIT di 100 righe</strong>: due risultati sono nodi <code>CulturalPropertyType</code> etichettati «bisturi» e i restanti novantotto sono risorse etichettate «scalpello», in prevalenza beni demoetnoantropologici regionali. Il limite raggiunto non consente di stimare il numero complessivo delle corrispondenze.</p>
+        <p>La restrizione del namespace riduce l'eterogeneità dei dataset, ma non risolve la polisemia: «scalpello» non implica un uso chirurgico e un nodo di tipo «bisturi» non equivale a uno strumento della Domus. Nessuna riga contiene «Domus del Chirurgo», «Rimini» o un identificatore del suo corredo. La Q5 non fornisce quindi un URI riusabile per l'arricchimento catalografico del caso di studio.</p>
+      </div>
+      <p class="back-link"><a href="#query-index" aria-label="Torna all'indice delle query">↑ Torna all'indice delle query</a></p>
+    </section>
+
+    <section id="q6">
+      <h2><span class="num">Q6</span>Ricerca globale del medico Eutyches</h2>
+      <hr class="rule">
+      <div class="kwbox">
+        <p class="why">Stessa logica di <a href="#q4">Q4</a> (ricerca globale, senza vincoli), applicata questa volta al nome del medico proprietario della Domus. Si verifica se esista, in una qualunque parte del grafo, una risorsa la cui etichetta contenga &laquo;Eutyches&raquo;: se la ricerca individua un'entit&agrave;, l'<code>OPTIONAL</code> ne recupera anche il tipo, per capire se sia effettivamente modellata come persona (es. una classe <code>foaf:Person</code> o simile) oppure se si tratti di un semplice riferimento indiretto.</p>
+      </div>
+      <figure class="code">
+        <figcaption><a href="queries/query-eu-06-ricerca-eutyches.rq">query-eu-06-ricerca-eutyches.rq</a> <span class="tag">DISTINCT &middot; FILTER &middot; REGEX &middot; OPTIONAL &middot; LIMIT</span></figcaption>
+<pre><code><span class="pre">PREFIX</span> rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
+<span class="kw">SELECT</span> <span class="kw">DISTINCT</span> <span class="var">?entity</span> <span class="var">?label</span> <span class="var">?type</span> <span class="kw">WHERE</span> {
+  <span class="var">?entity</span> rdfs:label <span class="var">?label</span> .
+  <span class="kw">FILTER</span> <span class="kw">regex</span>(<span class="var">?label</span>, <span class="str">"Eutyches"</span>, <span class="str">"i"</span>)
+  <span class="kw">OPTIONAL</span> { <span class="var">?entity</span> a <span class="var">?type</span> . }
+}
+<span class="kw">LIMIT</span> 50</code></pre>
+      </figure>
+      <a class="runlink" href="https://dati.cultura.gov.it/sparql?query=PREFIX%20rdfs%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23%3E%0ASELECT%20DISTINCT%20%3Fentity%20%3Flabel%20%3Ftype%20WHERE%20%7B%0A%20%20%3Fentity%20rdfs%3Alabel%20%3Flabel%20.%0A%20%20FILTER%20regex%28%3Flabel%2C%20%22Eutyches%22%2C%20%22i%22%29%0A%20%20OPTIONAL%20%7B%20%3Fentity%20a%20%3Ftype%20.%20%7D%0A%7D%0ALIMIT%2050&format=text%2Fhtml" target="_blank" rel="noopener">Esegui query</a>
+      <div class="result-sample" aria-label="Estratto dei risultati della query Q6">
+        <div class="result-sample-head">
+          <span class="lbl">Estratto dei risultati effettivi</span>
+          <span class="result-count">1 di 1 riga</span>
+        </div>
+        <p class="small">L'unico risultato è un titolo: non rappresenta il medico Eutyches come persona e non contiene un collegamento alla Domus.</p>
+        <div class="table-wrap">
+          <table class="results-table" aria-label="Righe selezionate dall'output Q6">
+            <thead><tr><th scope="col">entity</th><th scope="col">label</th><th scope="col">type</th></tr></thead>
+            <tbody>
+          <tr><td class="result-uri"><a href="https://w3id.org/arco/resource/Title/0900741619-urna-del-vicario-eutyches" target="_blank" rel="noopener"><code>https://w3id.org/arco/resource/Title/0900741619-urna-del-vicario-eutyches</code></a></td><td class="result-value"><code>&quot;Urna del vicario Eutyches&quot;</code></td><td class="result-uri"><a href="https://w3id.org/arco/ontology/context-description/Title" target="_blank" rel="noopener"><code>https://w3id.org/arco/ontology/context-description/Title</code></a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="rescomment">
+        <span class="lbl">Commento ai risultati</span>
+        <p>La ricerca del termine &laquo;Eutyches&raquo; ha restituito una sola risorsa, corrispondente al titolo &laquo;Urna del vicario Eutyches&raquo;, classificato come <code>a-cd:Title</code>. Il risultato non identifica quindi Eutyches come entit&agrave; autonoma o persona nel Knowledge Graph, ma esclusivamente come parte del titolo di un bene culturale. Non emerge, inoltre, alcun collegamento con la Domus del Chirurgo di Rimini.</p>
+      </div>
+      <p class="back-link"><a href="#query-index" aria-label="Torna all'indice delle query">↑ Torna all'indice delle query</a></p>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div><strong>Progetto Metodologie e Tecniche di Simulazione</strong> Università di Bologna<br>
+      <span class="small">Codice e materiali disponibili nel <a href="https://github.com/paracool/mts-unibo">repository GitHub</a>.</span></div>
+      <div class="small">Sito statico pubblicato con GitHub Pages.</div>
+    </div>
+  </footer>
+  <script src="main.js"></script>
+</body>
+</html>
+
+
+

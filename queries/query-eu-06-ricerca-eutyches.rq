@@ -1,0 +1,7 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT DISTINCT ?entity ?label ?type WHERE {
+  ?entity rdfs:label ?label .
+  FILTER regex(?label, "Eutyches", "i")
+  OPTIONAL { ?entity a ?type . }
+}
+LIMIT 50

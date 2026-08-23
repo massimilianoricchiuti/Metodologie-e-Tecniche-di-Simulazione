@@ -1,0 +1,5 @@
+ASK {
+  <https://w3id.org/arco/resource/ArchaeologicalProperty/0800675608>
+    ?directProperty
+  <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8> .
+}

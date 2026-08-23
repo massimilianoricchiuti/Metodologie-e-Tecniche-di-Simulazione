@@ -1,0 +1,158 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix l0: <https://w3id.org/italia/onto/l0/> .
+@prefix cis: <http://dati.beniculturali.it/cis/> .
+@prefix arco: <https://w3id.org/arco/ontology/arco/> .
+@prefix a-cd: <https://w3id.org/arco/ontology/context-description/> .
+@prefix domus: <https://massimilianoricchiuti.github.io/gepid-domus-chirurgo/resource/> .
+@prefix domus-onto: <https://massimilianoricchiuti.github.io/gepid-domus-chirurgo/ontology/> .
+
+#################################################################
+# Minimal RDFS extension proposed by the project
+#################################################################
+
+domus-onto:HistoricalFigure a rdfs:Class ;
+  rdfs:label "historical figure"@en , "figura storica"@it ;
+  rdfs:comment "Classe locale usata per figure storiche pertinenti alla narrazione del sito ma non individuate come risorse ArCo nel KG interrogato."@it ;
+  rdfs:subClassOf l0:Agent .
+
+domus-onto:FindGroup a rdfs:Class ;
+  rdfs:label "find group"@en , "gruppo di reperti"@it ;
+  rdfs:comment "Classe locale per insiemi di reperti descritti come gruppo unitario quando i singoli oggetti non sono enumerati o verificati come risorse RDF."@it ;
+  rdfs:subClassOf a-cd:Subject .
+
+domus-onto:EnrichmentAssertion a rdfs:Class ;
+  rdfs:label "enrichment assertion"@en , "asserzione di arricchimento"@it ;
+  rdfs:comment "Classe locale per documentare confidenza, evidenza e stato di verifica delle triple proposte."@it .
+
+domus-onto:hasArchaeologicalProvenanceSite a rdf:Property ;
+  rdfs:label "has archaeological provenance site"@en , "ha sito archeologico di provenienza"@it ;
+  rdfs:comment "Collega un bene archeologico al sito di provenienza quando la provenienza è attestata nel testo ma non modellata come relazione RDF diretta nel KG interrogato."@it ;
+  rdfs:domain arco:ArchaeologicalProperty ;
+  rdfs:range cis:Site ;
+  rdfs:subPropertyOf dcterms:spatial .
+
+domus-onto:hasAssociatedFigure a rdf:Property ;
+  rdfs:label "has associated figure"@en , "ha figura associata"@it ;
+  rdfs:comment "Collega un sito o tema culturale a una figura storica rilevante, con valore euristico e da verificare quando mancano risorse catalografiche nel KG."@it ;
+  rdfs:domain cis:Site ;
+  rdfs:range domus-onto:HistoricalFigure .
+
+domus-onto:hasFindGroup a rdf:Property ;
+  rdfs:label "has find group"@en , "ha gruppo di reperti"@it ;
+  rdfs:comment "Collega un sito a un insieme di reperti trattato come gruppo descrittivo, evitando di inventare i singoli reperti non verificati."@it ;
+  rdfs:domain cis:Site ;
+  rdfs:range domus-onto:FindGroup .
+
+domus-onto:evidence a rdf:Property ;
+  rdfs:label "evidence"@en , "evidenza"@it ;
+  rdfs:comment "Fonte o motivazione testuale usata per una proposta di arricchimento."@it .
+
+domus-onto:confidenceLevel a rdf:Property ;
+  rdfs:label "confidence level"@en , "livello di confidenza"@it .
+
+domus-onto:verificationStatus a rdf:Property ;
+  rdfs:label "verification status"@en , "stato di verifica"@it .
+
+#################################################################
+# Existing resources used as anchors
+#################################################################
+
+<https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8>
+  a cis:Site ;
+  rdfs:label "Domus del Chirurgo"@it ;
+  l0:name "Domus del Chirurgo"@it .
+
+#################################################################
+# Accepted triples: directly supported by the project SPARQL analysis
+#################################################################
+
+<https://w3id.org/arco/resource/ArchaeologicalProperty/0800675608>
+  domus-onto:hasArchaeologicalProvenanceSite <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8> .
+
+domus:assertion-0800675608-provenance a domus-onto:EnrichmentAssertion ;
+  rdf:subject <https://w3id.org/arco/resource/ArchaeologicalProperty/0800675608> ;
+  rdf:predicate domus-onto:hasArchaeologicalProvenanceSite ;
+  rdf:object <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8> ;
+  domus-onto:confidenceLevel "alta"@it ;
+  domus-onto:verificationStatus "accettata nel progetto"@it ;
+  domus-onto:evidence "Il campo a-cd:historicalInformation del bene 0800675608 menziona la pertinenza alla Domus del Chirurgo; la relazione diretta non è presente come tripla navigabile nel KG interrogato."@it .
+
+#################################################################
+# Suggested triples: useful enrichment, not asserted as catalogue truth
+#################################################################
+
+<https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8>
+  a-cd:hasSubject domus:RomanSurgery , domus:RomanMedicine ;
+  domus-onto:hasFindGroup domus:SurgicalInstrumentarium ;
+  owl:sameAs <https://www.wikidata.org/entity/Q3713399> .
+
+domus:RomanSurgery a a-cd:Subject ;
+  rdfs:label "chirurgia romana"@it , "Roman surgery"@en ;
+  l0:name "chirurgia romana"@it .
+
+domus:RomanMedicine a a-cd:Subject ;
+  rdfs:label "medicina romana"@it , "Roman medicine"@en ;
+  l0:name "medicina romana"@it .
+
+domus:SurgicalInstrumentarium a domus-onto:FindGroup ;
+  rdfs:label "corredo di strumenti chirurgici della Domus del Chirurgo"@it ;
+  l0:name "corredo di strumenti chirurgici"@it ;
+  dcterms:subject domus:RomanSurgery ;
+  domus-onto:confidenceLevel "media"@it ;
+  domus-onto:verificationStatus "suggerita: richiede riscontro catalografico puntuale sui singoli strumenti"@it .
+
+domus:assertion-site-roman-surgery a domus-onto:EnrichmentAssertion ;
+  rdf:subject <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8> ;
+  rdf:predicate a-cd:hasSubject ;
+  rdf:object domus:RomanSurgery ;
+  domus-onto:confidenceLevel "media"@it ;
+  domus-onto:verificationStatus "suggerita nel progetto"@it ;
+  domus-onto:evidence "Il tema della chirurgia romana emerge dalla narrazione del caso, ma non è risultato come risorsa RDF ArCo specifica dalle query eseguite."@it .
+
+domus:assertion-site-roman-medicine a domus-onto:EnrichmentAssertion ;
+  rdf:subject <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8> ;
+  rdf:predicate a-cd:hasSubject ;
+  rdf:object domus:RomanMedicine ;
+  domus-onto:confidenceLevel "media"@it ;
+  domus-onto:verificationStatus "suggerita nel progetto"@it ;
+  domus-onto:evidence "Il tema della medicina romana è utile per rendere interrogabile la dimensione storico-culturale della Domus senza inventare singoli reperti."@it .
+
+domus:assertion-site-findgroup a domus-onto:EnrichmentAssertion ;
+  rdf:subject <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8> ;
+  rdf:predicate domus-onto:hasFindGroup ;
+  rdf:object domus:SurgicalInstrumentarium ;
+  domus-onto:confidenceLevel "media"@it ;
+  domus-onto:verificationStatus "suggerita: non sostituisce la catalogazione dei singoli strumenti"@it ;
+  domus-onto:evidence "I prompt e le query indicano che il corredo chirurgico è rilevante ma non sono stati individuati URI ArCo puntuali per i singoli strumenti."@it .
+
+domus:assertion-site-wikidata-sameas a domus-onto:EnrichmentAssertion ;
+  rdf:subject <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8> ;
+  rdf:predicate owl:sameAs ;
+  rdf:object <https://www.wikidata.org/entity/Q3713399> ;
+  domus-onto:confidenceLevel "media"@it ;
+  domus-onto:verificationStatus "suggerita: da ricontrollare sull'entità Wikidata prima della pubblicazione definitiva"@it ;
+  domus-onto:evidence "L'allineamento esterno è stato proposto dall'output Gemini; viene mantenuto come arricchimento interoperabile, ma non come dato catalografico ArCo."@it .
+
+#################################################################
+# To verify: relevant narrative entity not found as ArCo resource
+#################################################################
+
+<https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8>
+  domus-onto:hasAssociatedFigure domus:Eutyches .
+
+domus:Eutyches a domus-onto:HistoricalFigure ;
+  rdfs:label "Eutyches"@it ;
+  l0:name "Eutyches"@it ;
+  domus-onto:confidenceLevel "da verificare"@it ;
+  domus-onto:verificationStatus "non trovato come risorsa ArCo con le query eseguite; da verificare su catalogo, fonti museali o bibliografia"@it .
+
+domus:assertion-site-eutyches a domus-onto:EnrichmentAssertion ;
+  rdf:subject <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8> ;
+  rdf:predicate domus-onto:hasAssociatedFigure ;
+  rdf:object domus:Eutyches ;
+  domus-onto:confidenceLevel "bassa"@it ;
+  domus-onto:verificationStatus "da verificare"@it ;
+  domus-onto:evidence "Eutyches è rilevante nella narrazione storico-archeologica del caso, ma non è stato trovato come risorsa ArCo pertinente dalle query eseguite."@it .

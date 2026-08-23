@@ -1,0 +1,8 @@
+PREFIX a-cd: <https://w3id.org/arco/ontology/context-description/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?subject ?label
+WHERE {
+  <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8> a-cd:hasSubject ?subject .
+  OPTIONAL { ?subject rdfs:label ?label . }
+}
+ORDER BY ?label

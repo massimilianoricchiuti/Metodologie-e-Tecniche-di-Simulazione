@@ -1,0 +1,28 @@
+RUOLO
+Agisci come validatore RDF/Turtle e revisore semantico.
+
+INPUT
+Riceverai un blocco Turtle proposto per arricchire un knowledge graph ArCo sulla Domus del Chirurgo.
+
+COMPITO
+Controlla:
+1. sintassi Turtle;
+2. prefissi dichiarati e usati;
+3. struttura soggetto-predicato-oggetto;
+4. eventuali literal usati dove servirebbe una risorsa;
+5. coerenza semantica rispetto ad ArCo, RDFS, CIS e l0;
+6. duplicazioni plausibili rispetto alle triple già osservate in ArCo;
+7. livello di confidenza per ogni gruppo di triple.
+
+OUTPUT RICHIESTO
+Restituisci una tabella con colonne:
+- Tripla o gruppo di triple;
+- Stato: accettare / correggere / scartare / verificare;
+- Motivo;
+- Correzione proposta;
+- Query ASK o SELECT consigliata.
+
+VINCOLI
+- Non aggiungere nuove triple non richieste.
+- Non cambiare i namespace senza motivazione.
+- Se non puoi verificare una cosa, scrivi "da verificare".

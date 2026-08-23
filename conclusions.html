@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Esito, workflow, gap, sfide, arricchimento RDF e sviluppi futuri del progetto sulla Domus del Chirurgo in ArCo.">
+  <title>Progetto GEPID — Conclusioni</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Salta al contenuto</a>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html"><span class="mark">GEPID</span><span class="sub">Progetto MTS</span></a>
+      <button class="nav-toggle" type="button" aria-label="Apri menu">☰</button>
+      <nav class="nav" aria-label="Navigazione principale">
+        <a href="index.html">Home</a>
+        <a href="methodology.html">Metodologia</a>
+        <a href="sparql.html">SPARQL</a>
+        <a href="prompts.html">Prompt e LLM</a>
+        <a href="rdf.html" aria-label="Arricchimento RDF">RDF</a>
+        <a href="conclusions.html">Conclusioni</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="hero">
+      <p class="eyebrow">Esito · Workflow · Sviluppi</p>
+      <h1>Dalla domanda di ricerca alle <span class="accent">conclusioni</span></h1>
+      <p class="lede">Questa pagina riunisce il resoconto del progetto e le sfide incontrate. È pensata come traccia per presentare il lavoro: il caso di studio, il metodo, il gap individuato, il confronto fra modelli linguistici, l'arricchimento RDF realmente ottenuto e ciò che resta da fare.</p>
+      <div class="pills" aria-label="Indice delle conclusioni">
+        <a class="pill" href="#esito">Esito</a>
+        <a class="pill" href="#workflow">Workflow</a>
+        <a class="pill" href="#gap">Gap</a>
+        <a class="pill" href="#sfide">Sfide</a>
+        <a class="pill" href="#llm">LLM</a>
+        <a class="pill" href="#arricchimento">Arricchimento</a>
+        <a class="pill" href="#sviluppi">Sviluppi</a>
+      </div>
+    </section>
+
+    <section id="esito">
+      <h2><span class="num">01</span>L'obiettivo è stato raggiunto?</h2>
+      <hr class="rule">
+      <p><strong>Sì, come indagine e come prototipo controllato; soltanto in parte come intervento sul gap catalografico.</strong> Il progetto ha individuato una lacuna reale nel modo in cui la <a href="index.html#contesto">Domus del Chirurgo</a> è rappresentata in <a href="https://w3id.org/arco" target="_blank" rel="noopener">ArCo</a>, l'ha documentata con <a href="sparql.html">sei query riproducibili</a>, ha sottoposto le proposte di due LLM a revisione critica e ha prodotto un <a href="rdf/domus_enrichment.ttl">Turtle finale</a> circoscritto alle sole evidenze disponibili.</p>
+      <p>Il lavoro non ha invece catalogato il corredo chirurgico della Domus né Eutyches, non ha completato la descrizione del sito e non ha modificato l'<a href="https://dati.cultura.gov.it/sparql" target="_blank" rel="noopener">endpoint ufficiale di ArCo</a>. Ha colmato un sotto-problema preciso: il collegamento diretto fra un reperto già catalogato e il sito, oggi ricostruibile soltanto attraverso un nodo intermedio.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Obiettivo</th><th>Esito verificato</th></tr></thead>
+          <tbody>
+            <tr><td>Individuare e spiegare il gap</td><td><strong>Raggiunto.</strong> Il gap è descritto su quattro livelli e sostenuto dai risultati delle query.</td></tr>
+            <tr><td>Valutare il contributo degli LLM</td><td><strong>Raggiunto.</strong> Due modelli sono stati confrontati lungo quattro prompt, distinguendo proposte plausibili e affermazioni non sostenute.</td></tr>
+            <tr><td>Produrre un arricchimento RDF difendibile</td><td><strong>Raggiunto in forma locale.</strong> Una relazione collega il reperto <code>0800675608</code> alla Domus.</td></tr>
+            <tr><td>Colmare l'intero gap della Domus in ArCo</td><td><strong>Non raggiunto.</strong> Corredo, Eutyches, descrizione del sito e frammentazione restano problemi aperti.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note"><strong>Risposta breve.</strong> Il progetto dimostra un metodo riproducibile per passare dalle evidenze SPARQL a un arricchimento RDF verificabile; non presenta come risolte le lacune per le quali il grafo non offre risorse pertinenti.</div>
+    </section>
+
+    <section id="workflow">
+      <h2><span class="num">02</span>Il workflow del lavoro</h2>
+      <hr class="rule">
+      <p>Il percorso ricompone argomento, metodologia, strumenti, query, prompt, confronto fra modelli, arricchimento e validazione in una sequenza leggibile anche durante una presentazione.</p>
+      <ol class="steps">
+        <li>
+          <h3>1. Scelta del caso di studio</h3>
+          <p>La <a href="index.html#contesto">Domus del Chirurgo di Rimini</a>, abitazione romana del II secolo d.C. celebre per circa 150 strumenti chirurgici attribuiti al medico Eutyches, è un caso molto documentato sul Web aperto ma adatto a verificare la copertura di un knowledge graph del patrimonio.</p>
+        </li>
+        <li>
+          <h3>2. Esplorazione incrementale di ArCo</h3>
+          <p>La <a href="methodology.html#gap-discovery">vocabulary discovery</a> parte dalla ricerca per etichetta: la <a href="sparql.html#q1">Q1</a> individua le risorse associate alla Domus; la <a href="sparql.html#q2">Q2</a> mostra relazioni entranti e uscenti; la <a href="sparql.html#q3">Q3</a> percorre il legame indiretto verso cinque beni. Le <a href="sparql.html#q4">Q4</a> e <a href="sparql.html#q5">Q5</a> cercano il corredo prima globalmente e poi nel namespace ArCo; la <a href="sparql.html#q6">Q6</a> verifica il nome Eutyches.</p>
+        </li>
+        <li>
+          <h3>3. Formalizzazione del gap</h3>
+          <p>Le evidenze vengono ordinate in un <a href="methodology.html#gap">gap su quattro livelli</a>: sito, relazione, collezione o narrazione, frammentazione degli URI.</p>
+        </li>
+        <li>
+          <h3>4. Confronto fra due LLM</h3>
+          <p>Lo stesso <a href="prompts.html">workflow di quattro prompt</a> è applicato a ChatGPT 5.5 extended e Gemini 3.5 extended: estrazione della conoscenza candidata, trasformazione in Turtle, revisione critica e validazione.</p>
+        </li>
+        <li>
+          <h3>5. Selezione delle sole affermazioni sostenute</h3>
+          <p>La <a href="prompts.html#errori">revisione degli errori</a> elimina Eutyches, il corredo, gli allineamenti prematuri e ogni tripla che confonda plausibilità sintattica e attendibilità del contenuto.</p>
+        </li>
+        <li>
+          <h3>6. Arricchimento e verifica</h3>
+          <p>La pagina <a href="rdf.html">Arricchimento RDF</a> documenta la proprietà locale, la tripla finale, il <a href="rdf/validation-report.md">report di validazione</a> e i limiti del risultato.</p>
+        </li>
+      </ol>
+      <div class="note"><strong>Strumenti.</strong> Le query sono state scritte ed eseguite con <a href="https://yasgui.org" target="_blank" rel="noopener">YASGUI</a> sull'<a href="https://dati.cultura.gov.it/sparql" target="_blank" rel="noopener">endpoint SPARQL di ArCo</a>; <a href="https://query.wikidata.org" target="_blank" rel="noopener">Wikidata Query Service</a> ha fornito dati di confronto sull'<a href="https://www.wikidata.org/wiki/Q3713399" target="_blank" rel="noopener">item Q3713399</a>; interfacce o API dei modelli sono state usate per i prompt; il sito è pubblicato con <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a>.</div>
+    </section>
+
+    <section id="gap">
+      <h2><span class="num">03</span>Quale gap abbiamo trovato?</h2>
+      <hr class="rule">
+      <p>La lacuna non dipende dall'assenza del lessico necessario: le <a href="sparql.html#q4">Q4</a> e <a href="sparql.html#q5">Q5</a> mostrano corrispondenze lessicali e nodi di tipo coerenti con i termini ricercati, ma nessun URI attribuibile al corredo della Domus. Il problema riguarda la copertura catalografica e l'interconnessione del caso specifico.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Livello</th><th>Evidenza osservata</th><th>Conseguenza</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Sito</strong></td><td>Il nodo della Domus espone soltanto tipo, indirizzo ed etichetta: mancano datazione, storia, descrizione e immagine.</td><td>La presenza del luogo nel grafo non equivale a una rappresentazione completa.</td></tr>
+            <tr><td><strong>Relazione</strong></td><td>Soltanto cinque beni sono raggiungibili attraverso <code>TimeIndexedTypedLocation</code>; non emerge un collegamento diretto sito↔bene.</td><td>La navigazione richiede il percorso ricostruito dalla <a href="sparql.html#q3">Q3</a>.</td></tr>
+            <tr><td><strong>Collezione / narrazione</strong></td><td>Le corrispondenze lessicali riguardano altri contesti o nodi di tipo ambigui; nessun URI è attribuibile al corredo della Domus ed Eutyches non emerge come persona collegata al sito.</td><td>Non esistono URI pertinenti da riusare per il corredo o per il medico.</td></tr>
+            <tr><td><strong>Frammentazione</strong></td><td>Lo stesso luogo compare con tre URI: il nodo ArCo e due record MiBACT–Luoghi collegati tramite <code>owl:sameAs</code>.</td><td>L'identità del sito è distribuita e il nodo da interrogare non è immediatamente evidente.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note"><strong>In sintesi.</strong> In ArCo la Domus esiste come luogo, ma è scollegata dalla ricchezza archeologica e narrativa che la rende celebre. La conoscenza disponibile sul Web aperto, rappresentata per confronto da <a href="https://it.wikipedia.org/wiki/Domus_del_chirurgo" target="_blank" rel="noopener">Wikipedia</a> e <a href="https://www.wikidata.org/wiki/Q3713399" target="_blank" rel="noopener">Wikidata</a>, non trova un equivalente completo nel knowledge graph del patrimonio.</div>
+    </section>
+
+    <section id="sfide">
+      <h2><span class="num">04</span>Le sfide e come le abbiamo affrontate</h2>
+      <hr class="rule">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Sfida</th><th>Problema incontrato</th><th>Soluzione adottata</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>Collegamento bene↔sito controintuitivo</strong></td>
+              <td>Le relazioni dirette del sito mostrano nodi di localizzazione, non i reperti cui appartengono.</td>
+              <td>La <a href="sparql.html#q3">Q3</a> percorre <code>hasTimeIndexedTypedLocation</code> e <code>atSite</code>, documentando il pattern <code>bene → TimeIndexedTypedLocation → Site</code>.</td>
+            </tr>
+            <tr>
+              <td><strong>Frammentazione e duplicazione degli URI</strong></td>
+              <td>ArCo, due record MiBACT–Luoghi e vari nodi-satellite descrivono la stessa Domus.</td>
+              <td>La <a href="sparql.html#q1">Q1</a> individua le risorse omonime; la <a href="sparql.html#q2">Q2</a> mappa gli <code>owl:sameAs</code>. Il nodo ArCo viene scelto come ancora e la frammentazione diventa parte del gap.</td>
+            </tr>
+            <tr>
+            <td><strong>Rumore lessicale</strong></td>
+            <td>La <a href="sparql.html#q4">Q4</a> raggiunge il limite di 100 righe con corrispondenze eterogenee, senza stabilire la pertinenza per la Domus.</td>
+            <td>La <a href="sparql.html#q5">Q5</a> restringe il namespace, ma restituisce due nodi «bisturi» e novantotto risultati «scalpello»: la lettura critica distingue tipi controllati e ambiguità lessicali. Nessun URI identifica il corredo della Domus.</td>
+          </tr>
+            <tr>
+              <td><strong>Corrispondenza lessicale e pertinenza semantica</strong></td>
+              <td>La <a href="sparql.html#q6">Q6</a> trova «Urna del vicario Eutyches», ma l'uguaglianza della stringa non identifica il medico cercato.</td>
+              <td>La risorsa omonima non viene riusata e il Turtle finale non introduce Eutyches senza un identificatore pertinente.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="llm">
+      <h2><span class="num">05</span>Che cosa ha aggiunto il confronto fra LLM?</h2>
+      <hr class="rule">
+      <p>I modelli non sono stati usati come fonte, ma come strumenti per generare e sottoporre a verifica ipotesi di arricchimento. Il <a href="prompts.html">workflow sequenziale</a> ha mantenuto separati i quattro passaggi.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Prompt</th><th>Tecnica</th><th>Funzione nel workflow</th></tr></thead>
+          <tbody>
+            <tr><td><a href="prompts/prompt-A-zero-shot.txt"><strong>A</strong></a></td><td>Zero-shot</td><td>Estrarre conoscenza candidata distinguendo fatti, inferenze e ipotesi.</td></tr>
+            <tr><td><a href="prompts/prompt-B-few-shot.txt"><strong>B</strong></a></td><td>Few-shot</td><td>Trasformare le informazioni candidate in triple Turtle.</td></tr>
+            <tr><td><a href="prompts/prompt-C-cot-controlled.txt"><strong>C</strong></a></td><td>Chain-of-thought controllato</td><td>Rivedere classi, proprietà e rischi delle proposte.</td></tr>
+            <tr><td><a href="prompts/prompt-D-validation.txt"><strong>D</strong></a></td><td>Validazione</td><td>Classificare le triple e separare ciò che può essere mantenuto da ciò che deve essere escluso.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Negli output osservati, ChatGPT ha distinto più spesso fatti, inferenze e ipotesi; Gemini ha prodotto collegamenti più immediati, ma anche affermazioni più forti dell'input. La revisione ha individuato tre errori ricorrenti: introduzione non sostenuta di Eutyches e del corredo, uso prematuro di <code>owl:sameAs</code> e confusione fra validità sintattica e verità del contenuto.</p>
+      <p>Il valore degli LLM è stato quindi soprattutto critico: hanno reso visibile quanto sia facile trasformare una narrazione plausibile in un'asserzione RDF apparentemente corretta ma priva di evidenza.</p>
+    </section>
+
+    <section id="arricchimento">
+      <h2><span class="num">06</span>Come abbiamo colmato il gap?</h2>
+      <hr class="rule">
+      <p><strong>Lo abbiamo colmato solo nella componente di relazione bene–sito.</strong> Il file <a href="rdf/domus_enrichment.ttl"><code>rdf/domus_enrichment.ttl</code></a>, validato sintatticamente, contiene <strong>8 triple</strong>: sette definiscono la proprietà locale <a href="rdf/domus_enrichment.ttl"><code>hasArchaeologicalContextSite</code></a> e una collega il reperto <a href="https://w3id.org/arco/resource/ArchaeologicalProperty/0800675608" target="_blank" rel="noopener"><code>0800675608</code></a> al <a href="https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8" target="_blank" rel="noopener">nodo ArCo della Domus</a>.</p>
+      <p>La proprietà specializza <a href="https://www.dublincore.org/specifications/dublin-core/dcmi-terms/terms/spatial/" target="_blank" rel="noopener"><code>dcterms:spatial</code></a> e affianca, senza sostituirlo, il percorso indiretto mostrato dalla <a href="sparql.html#q3">Q3</a>. Non aggiunge Eutyches, il corredo chirurgico, temi o allineamenti esterni; non modifica il grafo ufficiale.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Aspetto del gap</th><th>Risultato</th></tr></thead>
+          <tbody>
+            <tr><td>Collegamento diretto bene–sito</td><td><strong>Affrontato per <code>0800675608</code>.</strong> La nuova tripla evita il passaggio obbligato dal nodo di localizzazione.</td></tr>
+            <tr><td>Corredo chirurgico della Domus</td><td><strong>Non colmato.</strong> Le <a href="sparql.html#q4">Q4</a> e <a href="sparql.html#q5">Q5</a> non offrono una risorsa attribuibile alla Domus.</td></tr>
+            <tr><td>Medico Eutyches</td><td><strong>Non colmato.</strong> La <a href="sparql.html#q6">Q6</a> restituisce soltanto un titolo omonimo e non pertinente.</td></tr>
+            <tr><td>Descrizione e frammentazione del sito</td><td><strong>Non modificate.</strong> La <a href="sparql.html#q2">Q2</a> documenta il problema, ma non fornisce nuovi valori da asserire.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="artifact-links">
+        <a class="card" href="rdf.html"><span class="k">Spiegazione</span><span class="t">Arricchimento RDF</span><span class="d">Dal percorso ArCo alla tripla finale.</span></a>
+        <a class="card" href="rdf/domus_enrichment.ttl"><span class="k">Risultato</span><span class="t">Turtle finale</span><span class="d">Le otto triple mantenute.</span></a>
+        <a class="card" href="rdf/validation-report.md"><span class="k">Controllo</span><span class="t">Validazione</span><span class="d">Parsing, conteggio e limiti.</span></a>
+        <a class="card" href="sparql-checks/check-direct-artifact-site-link.rq"><span class="k">Verifica</span><span class="t">Query di controllo</span><span class="d">Controllo del legame diretto in ArCo.</span></a>
+      </div>
+      <p>L'<a href="rdf/domus_enrichment_experimental.ttl">output sperimentale</a> rimane disponibile per documentare il confronto fra modelli, ma non coincide con l'arricchimento finale.</p>
+    </section>
+
+    <section id="sviluppi">
+      <h2><span class="num">07</span>Conclusioni e progetti futuri</h2>
+      <hr class="rule">
+      <p>L'indagine mostra che la presenza di una risorsa in un knowledge graph non garantisce una rappresentazione completa o facilmente interrogabile. Nel caso della Domus, un nodo minimale e una struttura intermedia rendono poco visibile il rapporto con i reperti; il corredo e il medico che definiscono l'identità storica del sito non emergono come entità pertinenti.</p>
+      <p>Il confronto con gli LLM conferma che un Turtle plausibile non è necessariamente attendibile. Il risultato finale è volutamente esiguo — una relazione fra due URI già documentati — ma è leggibile, sintatticamente valido, semanticamente difendibile e riproducibile a partire dalle query.</p>
+      <h3>Sviluppi coerenti con i limiti emersi</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Progetto futuro</th><th>Base nei risultati attuali</th><th>Condizione di rigore</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Estendere il legame bene–sito</strong></td><td>La <a href="sparql.html#q3">Q3</a> individua altri quattro beni oltre a <code>0800675608</code>.</td><td>Applicare a ogni risorsa un controllo equivalente prima di estendere la proprietà locale.</td></tr>
+            <tr><td><strong>Documentare corredo ed Eutyches</strong></td><td>Le <a href="sparql.html#q4">Q4</a> e <a href="sparql.html#q5">Q5</a>, insieme alla <a href="sparql.html#q6">Q6</a>, mostrano l'assenza di URI pertinenti.</td><td>Aggiungere nuove entità soltanto dopo aver reperito fonti catalografiche autorevoli e identificatori stabili.</td></tr>
+            <tr><td><strong>Completare il nodo del sito e riconciliare gli URI</strong></td><td>Il <a href="methodology.html#gap">gap</a> documenta campi descrittivi mancanti e tre URI per lo stesso luogo.</td><td>Verificare ogni valore e ogni allineamento; non dedurre <code>owl:sameAs</code> dalla sola somiglianza.</td></tr>
+            <tr><td><strong>Monitorare l'evoluzione di ArCo</strong></td><td>Il repository contiene <a href="https://github.com/paracool/mts-unibo/tree/max-version/sparql-checks" target="_blank" rel="noopener">query SPARQL di controllo</a> per legami, etichette, tipi e possibili allineamenti.</td><td>Rieseguire i controlli e aggiornare le conclusioni solo quando cambiano le evidenze del grafo.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="riferimenti">
+      <h2><span class="num">08</span>Riferimenti e materiali</h2>
+      <hr class="rule">
+      <ul>
+        <li><a href="https://it.wikipedia.org/wiki/Domus_del_chirurgo" target="_blank" rel="noopener">Domus del chirurgo — Wikipedia</a></li>
+        <li><a href="https://www.wikidata.org/wiki/Q3713399" target="_blank" rel="noopener">Domus del Chirurgo — Wikidata (Q3713399)</a></li>
+        <li><a href="https://w3id.org/arco" target="_blank" rel="noopener">ArCo Knowledge Graph</a> · <a href="https://dati.cultura.gov.it/sparql" target="_blank" rel="noopener">endpoint SPARQL</a></li>
+        <li><a href="https://catalogo.beniculturali.it/detail/ArchaeologicalProperty/0800675608" target="_blank" rel="noopener">Scheda di catalogo del mosaico 0800675608</a></li>
+        <li><a href="rdf/domus_enrichment.ttl">Turtle finale</a> · <a href="rdf/validation-report.md">report di validazione</a> · <a href="rdf/domus_enrichment_experimental.ttl">output sperimentale</a></li>
+        <li><a href="https://www.w3.org/TR/sparql11-query/" target="_blank" rel="noopener">SPARQL 1.1 Query Language — W3C</a> · <a href="https://yasgui.org" target="_blank" rel="noopener">YASGUI</a></li>
+        <li><a href="https://www.promptingguide.ai" target="_blank" rel="noopener">Prompt Engineering Guide</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div><strong>Progetto Metodologie e Tecniche di Simulazione</strong> Università di Bologna<br>
+      <span class="small">Codice e materiali disponibili nel <a href="https://github.com/paracool/mts-unibo">repository GitHub</a>.</span></div>
+      <div class="small">Sito statico pubblicato con GitHub Pages.</div>
+    </div>
+  </footer>
+  <script src="main.js"></script>
+</body>
+</html>

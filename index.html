@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Progetto GEPID — Home</title>
+  <meta name="description" content="Progetto GEPID: la Domus del Chirurgo di Rimini nel knowledge graph ArCo, fra lacune di rappresentazione e Large Language Models.">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .intro-lead {
+      font-size: 1.18rem;
+      line-height: 1.75;
+      max-width: 740px;
+      color: var(--ink);
+    }
+    .intro-lead em { color: var(--red-deep); font-style: normal; font-weight: 600; }
+    .pull {
+      border-left: 5px solid var(--red);
+      padding: 18px 24px;
+      margin: 32px 0;
+      background: var(--paper-2);
+      border-radius: 0 10px 10px 0;
+      font-size: 1.18rem;
+      font-family: var(--display);
+      font-weight: 600;
+      color: var(--red-deep);
+      line-height: 1.45;
+      max-width: 680px;
+    }
+    .domus-figure { margin: 10px 0 6px; }
+    .domus-figure img {
+      width: 100%; height: auto; max-height: 440px; object-fit: cover;
+      border-radius: 12px; display: block;
+      box-shadow: 0 12px 32px rgba(110,16,16,.16);
+    }
+    .domus-figure svg { width: 100%; height: auto; border-radius: 12px; display: block; box-shadow: 0 12px 32px rgba(110,16,16,.16); }
+    .domus-figure figcaption {
+      font-size: .86rem; color: var(--ink-soft); margin-top: 10px; font-style: italic;
+      max-width: 740px;
+    }
+    .domus-figure figcaption a { font-style: normal; }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Salta al contenuto</a>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html"><span class="mark">GEPID</span><span class="sub">Progetto MTS</span></a>
+      <button class="nav-toggle" type="button" aria-label="Apri menu">☰</button>
+      <nav class="nav" aria-label="Navigazione principale">
+        <a href="index.html">Home</a>
+        <a href="methodology.html">Metodologia</a>
+        <a href="sparql.html">SPARQL</a>
+        <a href="prompts.html">Prompt e LLM</a>
+        <a href="rdf.html" aria-label="Arricchimento RDF">RDF</a>
+        <a href="conclusions.html">Conclusioni</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="hero">
+      <p class="eyebrow">Knowledge Graph · Web Semantico · LLM</p>
+      <h1>La Domus del Chirurgo <span class="accent">e il suo gap</span> in ArCo</h1>
+      <p class="lede">
+        Questo progetto, sviluppato per il corso di
+        <a href="https://www.unibo.it/it/studiare/insegnamenti-competenze-trasversali-moocs/insegnamenti/insegnamento/2025/483945" target="_blank" rel="noopener">Metodologie e Tecniche di Simulazione</a>,
+        indaga come la <a href="https://it.wikipedia.org/wiki/Domus_del_chirurgo" target="_blank" rel="noopener">Domus del Chirurgo</a>
+        di Rimini sia rappresentata nel knowledge graph del patrimonio culturale italiano
+        <a href="https://w3id.org/arco" target="_blank" rel="noopener">ArCo</a>.
+        L'indagine documenta la distanza fra la rilevanza storica del sito e la sua rappresentazione nel grafo,
+        quindi osserva come diversi
+        <a href="https://it.wikipedia.org/wiki/Modello_linguistico_di_grandi_dimensioni" target="_blank" rel="noopener">Large Language Models</a>
+        ragionano su questa lacuna e tentano di colmarla.
+      </p>
+    </section>
+
+    <!-- Se la foto non si carica, compare automaticamente l'illustrazione a mosaico originale. -->
+    <figure class="domus-figure" id="domus-photo">
+      <img
+        src="https://commons.wikimedia.org/wiki/Special:FilePath/Domus%20del%20chirurgo,%20mosaico%20di%20%22Orfeo%20tra%20gli%20animali%22.jpg?width=1200"
+        alt="Il mosaico di Orfeo tra gli animali nella Domus del Chirurgo di Rimini"
+        loading="lazy"
+        onerror="document.getElementById('domus-photo').style.display='none';document.getElementById('domus-illus').style.display='block';">
+      <figcaption>
+        Il mosaico di <em>Orfeo tra gli animali</em>, nella stanza-studio dove fu rinvenuto il ricco corredo chirurgico.
+        Foto di <a href="https://commons.wikimedia.org/wiki/User:Fringio" target="_blank" rel="noopener">Fringio</a>,
+        <a href="https://commons.wikimedia.org/wiki/File:Domus_del_chirurgo,_mosaico_di_%22Orfeo_tra_gli_animali%22.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>,
+        licenza <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="license noopener">CC BY-SA 4.0</a>.
+      </figcaption>
+    </figure>
+
+    <figure class="domus-figure" id="domus-illus" style="display:none;">
+      <svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustrazione a mosaico con lira, ispirata al mosaico di Orfeo">
+        <defs>
+          <pattern id="tess" width="18" height="18" patternUnits="userSpaceOnUse">
+            <rect width="18" height="18" fill="#e9dcc4"/>
+            <rect x="1.5" y="1.5" width="7" height="7" fill="#d8c19a"/>
+            <rect x="9.5" y="9.5" width="7" height="7" fill="#d8c19a"/>
+            <rect x="9.5" y="1.5" width="7" height="7" fill="#c9a15a"/>
+            <rect x="1.5" y="9.5" width="7" height="7" fill="#c9a15a"/>
+          </pattern>
+        </defs>
+        <rect x="0" y="0" width="800" height="380" fill="#6e1010"/>
+        <rect x="14" y="14" width="772" height="352" fill="url(#tess)"/>
+        <rect x="46" y="46" width="708" height="288" fill="#f2ead9" stroke="#9b1c1c" stroke-width="4"/>
+        <g fill="#9b1c1c">
+          <rect x="60" y="60" width="10" height="10"/><rect x="90" y="60" width="10" height="10"/><rect x="120" y="60" width="10" height="10"/>
+          <rect x="670" y="60" width="10" height="10"/><rect x="700" y="60" width="10" height="10"/><rect x="730" y="60" width="10" height="10"/>
+          <rect x="60" y="310" width="10" height="10"/><rect x="90" y="310" width="10" height="10"/><rect x="120" y="310" width="10" height="10"/>
+          <rect x="670" y="310" width="10" height="10"/><rect x="700" y="310" width="10" height="10"/><rect x="730" y="310" width="10" height="10"/>
+        </g>
+        <circle cx="400" cy="190" r="120" fill="#efe7da" stroke="#c9a15a" stroke-width="10"/>
+        <circle cx="400" cy="190" r="120" fill="none" stroke="#9b1c1c" stroke-width="2"/>
+        <g stroke="#6e1010" stroke-width="5" fill="none" stroke-linecap="round">
+          <path d="M362 250 C 340 210, 348 150, 372 132"/>
+          <path d="M438 250 C 460 210, 452 150, 428 132"/>
+          <line x1="372" y1="132" x2="428" y2="132"/>
+          <line x1="362" y1="250" x2="438" y2="250"/>
+        </g>
+        <g stroke="#9b1c1c" stroke-width="2.5">
+          <line x1="378" y1="140" x2="372" y2="244"/>
+          <line x1="390" y1="138" x2="388" y2="246"/>
+          <line x1="400" y1="137" x2="400" y2="247"/>
+          <line x1="410" y1="138" x2="412" y2="246"/>
+          <line x1="422" y1="140" x2="428" y2="244"/>
+        </g>
+        <g stroke="#7a8b3a" stroke-width="3" fill="#8aa043">
+          <path d="M300 300 q 40 -20 70 0" fill="none"/>
+          <path d="M500 300 q -40 -20 -70 0" fill="none"/>
+        </g>
+      </svg>
+      <figcaption>Illustrazione a mosaico originale, ispirata al mosaico di Orfeo tra gli animali (mostrata se la foto non è disponibile).</figcaption>
+    </figure>
+
+    <section id="contesto">
+      <h2><span class="num">01</span>Il contesto: la Domus del Chirurgo</h2>
+      <hr class="rule">
+      <p class="intro-lead">
+        La Domus del Chirurgo è un'abitazione romana della seconda metà del II secolo d.C., scoperta nel 1989
+        in Piazza Luigi Ferrari, nel centro storico di Rimini, e aperta al pubblico nel 2007. Il complesso,
+        esteso su circa 700 m², conserva una stratificazione che va dall'età tardo-repubblicana fino
+        all'alto Medioevo; la domus fu distrutta da un incendio verso la metà del III secolo d.C.
+      </p>
+      <p>
+        Il nome deriva dal ritrovamento di un corredo di circa <strong>150 strumenti chirurgici</strong> —
+        pinze, bisturi, specilli, sonde e uncini — una delle serie più complete di età romana.
+        Insieme ai mortai per i farmaci, il corredo indica che l'ultimo proprietario era un medico-chirurgo:
+        <strong>Eutyches</strong>, probabilmente di formazione ellenica e forse medico militare.
+        La varietà degli strumenti presuppone un livello di conoscenza anatomica e chirurgica sorprendente
+        per il II secolo d.C., con dispositivi specializzati per operazioni che l'Europa medievale avrebbe
+        faticato a concepire.
+      </p>
+
+      <div class="pull">
+        Strumenti chirurgici del II secolo d.C. che non avrebbero sfigurato in una sala operatoria
+        di molti secoli dopo: è questo il dettaglio che rende la Domus del Chirurgo un caso unico.
+      </div>
+
+      <p>
+        Tra i pavimenti spicca il mosaico con <em>Orfeo</em>; gli ambienti erano decorati da affreschi
+        e da un raffinato pannello in vetro con pesci. Il sito è visitabile in
+        <a href="https://www.comune.rimini.it/vivere-il-comune/luoghi/area-archeologica/domus-del-chirurgo" target="_blank" rel="noopener">Piazza Luigi Ferrari</a>,
+        mentre i reperti sono conservati nella sezione archeologica del
+        <a href="https://musei.comune.rimini.it/it/musei/museo-della-citta" target="_blank" rel="noopener">Museo della Città di Rimini</a>.
+      </p>
+      <p>
+        È un luogo ricco di storia e ben documentato nella letteratura scientifica e sul Web aperto, ma
+        ancora relativamente poco conosciuto dal grande pubblico. Proprio la compresenza di notorietà digitale
+        e sottorappresentazione nei sistemi di dati lo rende un caso adatto a mettere alla prova un knowledge graph
+        del patrimonio.
+      </p>
+    </section>
+
+    <section id="progetto">
+      <h2><span class="num">02</span>La domanda di ricerca e il gap</h2>
+      <hr class="rule">
+      <p>
+        Il punto di partenza è stato chiederci: <strong>come è rappresentata la Domus del Chirurgo
+        nel knowledge graph del patrimonio culturale italiano?</strong>
+        ArCo è il grafo della conoscenza del Ministero della Cultura, costruito a partire dalle schede
+        catalografiche dell'<a href="https://www.iccd.beniculturali.it" target="_blank" rel="noopener">ICCD</a>.
+        Contiene centinaia di migliaia di beni culturali descritti secondo ontologie formali e accessibili mediante
+        l'<a href="https://dati.cultura.gov.it/sparql" target="_blank" rel="noopener">endpoint SPARQL</a>.
+      </p>
+      <p>
+        L'esplorazione progressiva dell'endpoint ha mostrato una realtà più complessa delle attese:
+        il sito esiste nel grafo, ma è un nodo quasi vuoto, con pochissime proprietà, nessuna descrizione
+        e nessuna datazione. Cinque reperti minori risultano collegati soltanto in modo indiretto,
+        attraverso una localizzazione <em>alternativa</em>. Le <a href="sparql.html#q4">ricerche sul corredo</a> restituiscono
+        corrispondenze lessicali estranee al caso di studio, ma nessun URI attribuibile al corredo della Domus; <a href="sparql.html#q6">Eutyches</a> non emerge come
+        persona collegata al sito, bensì soltanto in un titolo omonimo non pertinente.
+        Questo è il <em>gap</em> documentato dal progetto.
+      </p>
+      <p>
+        Su questa lacuna sono stati quindi applicati diversi approcci di prompting, confrontando il comportamento
+        di due modelli linguistici nella formulazione e nella validazione di proposte di arricchimento.
+        Il percorso completo è illustrato nella <a href="methodology.html">metodologia</a>.
+      </p>
+    </section>
+
+    <section id="fonti">
+      <h2><span class="num">03</span>Fonti dati</h2>
+      <hr class="rule">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Fonte</th><th>Cosa fornisce</th><th>Accesso</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><a href="https://w3id.org/arco" target="_blank" rel="noopener">ArCo</a></td>
+              <td>Patrimonio culturale italiano (catalogo MiC/ICCD). Fonte principale dell'indagine.</td>
+              <td><a href="https://dati.cultura.gov.it/sparql" target="_blank" rel="noopener">dati.cultura.gov.it/sparql</a></td>
+            </tr>
+            <tr>
+              <td><a href="https://www.wikidata.org/wiki/Q3713399" target="_blank" rel="noopener">Wikidata</a></td>
+              <td>Dati strutturati di confronto (item Q3713399).</td>
+              <td><a href="https://query.wikidata.org/sparql" target="_blank" rel="noopener">query.wikidata.org/sparql</a></td>
+            </tr>
+            <tr>
+              <td><a href="https://it.wikipedia.org/wiki/Domus_del_chirurgo" target="_blank" rel="noopener">Wikipedia (it)</a></td>
+              <td>Conoscenza narrativa di riferimento (ground truth qualitativa).</td>
+              <td>Web</td>
+            </tr>
+            <tr>
+              <td><a href="https://catalogo.beniculturali.it/detail/ArchaeologicalProperty/0800675608" target="_blank" rel="noopener">Catalogo Generale dei Beni Culturali</a></td>
+              <td>Schede catalografiche dei singoli reperti.</td>
+              <td>Web</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+
+    <section id="team">
+      <h2><span class="num">04</span>Il team</h2>
+      <hr class="rule">
+      <div class="team">
+        <div class="member"><div class="name">Luca Colori</div><div class="role">Autore del progetto</div><a class="member-email" href="mailto:luca.colori@studio.unibo.it">luca.colori@studio.unibo.it</a></div>
+        <div class="member"><div class="name">Massimiliano Ricchiuti</div><div class="role">Autore del progetto</div><a class="member-email" href="mailto:massimilia.ricchiuti@studio.unibo.it">massimilia.ricchiuti@studio.unibo.it</a></div>
+        <div class="member"><div class="name">Filippo Vignoli</div><div class="role">Autore del progetto</div><a class="member-email" href="mailto:filippo.vignoli@studio.unibo.it">filippo.vignoli@studio.unibo.it</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div><strong>Progetto Metodologie e Tecniche di Simulazione</strong> Università di Bologna<br>
+      <span class="small">Codice e materiali disponibili nel <a href="https://github.com/paracool/mts-unibo">repository GitHub</a>.</span></div>
+      <div class="small">Sito statico pubblicato con GitHub Pages.</div>
+    </div>
+  </footer>
+  <script src="main.js"></script>
+</body>
+</html>
+
+

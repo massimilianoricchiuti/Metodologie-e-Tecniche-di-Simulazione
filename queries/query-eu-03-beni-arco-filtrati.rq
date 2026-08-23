@@ -1,0 +1,13 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX arco: <https://w3id.org/arco/ontology/arco/>
+PREFIX a-loc: <https://w3id.org/arco/ontology/location/>
+SELECT DISTINCT ?entity ?label ?location
+WHERE {
+  ?entity a arco:ArchaeologicalProperty ;
+          a-loc:hasTimeIndexedTypedLocation ?location ;
+          rdfs:label ?label .
+  ?location a-loc:atSite
+    <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8> .
+  FILTER (LANG(?label) = "it" || LANG(?label) = "")
+}
+LIMIT 50

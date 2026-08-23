@@ -1,0 +1,7 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT DISTINCT ?entity ?label WHERE {
+  ?entity rdfs:label ?label .
+  FILTER STRSTARTS(STR(?entity), "https://w3id.org/arco/resource/")
+  FILTER regex(?label, "chirurgico|strumentario|bisturi|specillo|scalpello", "i")
+}
+LIMIT 100

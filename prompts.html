@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Perché sono stati usati gli LLM, tecniche di prompting, risposte osservate, differenze fra modelli ed errori riconosciuti.">
+  <title>Progetto GEPID — Prompt e LLM</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Salta al contenuto</a>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html"><span class="mark">GEPID</span><span class="sub">Progetto MTS</span></a>
+      <button class="nav-toggle" type="button" aria-label="Apri menu">☰</button>
+      <nav class="nav" aria-label="Navigazione principale">
+        <a href="index.html">Home</a>
+        <a href="methodology.html">Metodologia</a>
+        <a href="sparql.html">SPARQL</a>
+        <a href="prompts.html">Prompt e LLM</a>
+        <a href="rdf.html" aria-label="Arricchimento RDF">RDF</a>
+        <a href="conclusions.html">Conclusioni</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="hero">
+      <p class="eyebrow">Obiettivi · tecniche · risposte · confronto</p>
+      <h1><span class="accent">Prompt</span> e LLM</h1>
+      <p class="lede">I modelli sono stati usati per trasformare le evidenze raccolte in proposte, confrontare strategie di modellazione e riconoscere gli errori prima della selezione RDF finale.</p>
+    </section>
+
+    <section id="perche">
+      <h2><span class="num">01</span>Perché usare i modelli</h2>
+      <hr class="rule">
+      <p>Le <a href="sparql.html">query SPARQL</a> hanno già stabilito i dati di partenza e il <a href="methodology.html#gap">gap del progetto</a>. Gli LLM non sostituiscono questa indagine: servono a proporre una possibile traduzione RDF, rendere esplicite le scelte ontologiche e mostrare quali formulazioni superano le evidenze disponibili.</p>
+      <p>I prompt seguono una pipeline di estrazione, modellazione, revisione e validazione. Poiché ogni tecnica svolge un compito diverso, il lavoro non costituisce un confronto controllato tra zero-shot, few-shot e Chain-of-Thought. Il confronto osservato è quello fra i due modelli: ChatGPT 5.5 extended e Gemini 3.5 extended.</p>
+
+      <ol class="steps">
+        <li><h3>Estrarre</h3><p>Il prompt zero-shot separa fatti osservati, inferenze e ipotesi esterne.</p></li>
+        <li><h3>Modellare</h3><p>Il prompt few-shot usa tre esempi per orientare la produzione di Turtle minimale.</p></li>
+        <li><h3>Revisionare</h3><p>Il prompt strutturato rende visibili evidenze, scelte ontologiche, rischi e controlli.</p></li>
+        <li><h3>Validare</h3><p>Un ultimo prompt controlla sintassi, coerenza semantica e duplicazioni plausibili.</p></li>
+      </ol>
+
+      <div class="table-wrap"><table>
+        <thead><tr><th>Elemento</th><th>Protocollo adottato</th></tr></thead>
+        <tbody>
+          <tr><td>Modelli</td><td><em><a href="https://chatgpt.com/">ChatGPT 5.5 extended</a></em> e <em><a href="https://gemini.google.com/">Gemini 3.5 extended</a></em></td></tr>
+          <tr><td>Input</td><td>URI <a href="https://dati.beniculturali.it/arco/index.php">ArCo</a>, <a href="sparql.html">risultati delle query</a> e vincoli contro URI inventati o asserzioni non sostenute.</td></tr>
+          <tr><td>Valutazione</td><td>Aderenza all'input, parsimonia, correttezza RDF, riuso dei vocabolari e prudenza epistemica.</td></tr>
+          <tr><td>Limite di riproducibilità</td><td>Data, identificativo tecnico della versione, parametri e numero di esecuzioni non sono stati archiviati; i risultati hanno pertanto valore qualitativo.</td></tr>
+        </tbody>
+      </table></div>
+
+    </section>
+
+    <section id="zero-shot">
+      <h2><span class="num">02</span>Zero-shot</h2>
+      <hr class="rule">
+      <p>La prima fase precede la scrittura delle triple. Il modello deve classificare le informazioni in base alla loro forza probatoria e scartare ciò che l'input non consente di sostenere. Il testo eseguito è disponibile nel file <a href="prompts/prompt-A-zero-shot.txt"><code>prompt-A-zero-shot.txt</code></a>.</p>
+      <div class="note"><strong>Allineamento con le query aggiornate.</strong> I prompt e gli output sono documenti storici dell'esperimento e restano invariati. Le <a href="sparql.html#q4">Q4</a> e <a href="sparql.html#q5">Q5</a> restituiscono corrispondenze lessicali e nodi di tipo pertinenti, ma nessun URI attribuibile al corredo specifico della Domus. La <a href="sparql.html#q6">Q6</a> trova inoltre un titolo omonimo, ma non il medico Eutyches come persona collegata al sito.</div>
+
+      <details class="note">
+        <summary><strong>Leggi il prompt eseguito</strong></summary>
+        <figure class="code"><figcaption>Prompt A <span class="tag">zero-shot</span></figcaption>
+<pre><code>RUOLO
+Agisci come knowledge engineer prudente nel dominio del patrimonio culturale italiano.
+
+CONTESTO
+Stiamo studiando la Domus del Chirurgo di Rimini nel knowledge graph ArCo. Le query SPARQL mostrano che il nodo ArCo del sito è quasi vuoto: contiene essenzialmente tipo, indirizzo, label e site type. Dal sito si raggiungono solo cinque beni tramite localizzazione alternativa. Il corredo chirurgico, Eutyches e parte della narrazione storico-archeologica non risultano modellati come risorse RDF.
+
+INPUT VERIFICATO
+- URI sito ArCo: https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8
+- URI bene ispezionato: https://w3id.org/arco/resource/ArchaeologicalProperty/0800675608
+- Dal bene 0800675608 emerge, nel campo historicalInformation, un riferimento testuale alla Domus del Chirurgo.
+- Le ricerche SPARQL su label per chirurg*, bisturi, specillo, scalpello, Eutyches e strumentario non hanno restituito beni pertinenti, ma falsi positivi lessicali.
+
+COMPITO
+Estrai solo conoscenza candidata a colmare il gap del KG, distinguendo tra:
+1. fatti direttamente supportati dall'input;
+2. inferenze prudenti;
+3. ipotesi da verificare su fonti esterne.
+
+OUTPUT RICHIESTO
+Restituisci:
+- elenco delle informazioni utili;
+- entità RDF candidate;
+- relazioni RDF candidate;
+- informazioni da escludere perché non verificabili;
+- breve nota sui rischi di allucinazione.
+
+VINCOLI
+- Non inventare URI ArCo inesistenti.
+- Non creare 150 strumenti individuali se l'input non li enumera.
+- Non trasformare un fatto narrativo in fatto certo se non è verificato.
+- Preferisci poche triple motivabili a molte triple arbitrarie.
+- Usa italiano formale e conciso.</code></pre></figure>
+      </details>
+
+      <details class="note">
+        <summary><strong>Leggi gli output osservati</strong></summary>
+        <h3>ChatGPT 5.5 extended</h3>
+        <figure class="code"><figcaption>Output A — estratto <span class="tag">ChatGPT</span></figcaption>
+<pre><code>Fatti supportati:
+- il nodo Site/341671000c872aa799b1e99ae08ca1e8 è riferito alla Domus del Chirurgo;
+- il bene ArchaeologicalProperty/0800675608 contiene nel campo historicalInformation un riferimento testuale alla Domus;
+- le query su chirurg*, bisturi, specillo, scalpello, Eutyches e strumentario non restituiscono risorse RDF pertinenti;
+- il nodo del sito espone soprattutto tipo, indirizzo, label e site type.
+
+Inferenze prudenti:
+- il collegamento bene-sito può essere reso più navigabile con una proprietà locale;
+- Eutyches può essere modellato solo come entità candidata nel namespace locale;
+- il corredo chirurgico può essere rappresentato come gruppo unitario, non come inventario di strumenti;
+- la chirurgia romana può essere modellata come tema culturale.
+
+Informazioni escluse:
+- numero esatto degli strumenti;
+- singoli strumenti come risorse RDF autonome;
+- identificazione certa di Eutyches come proprietario, medico o abitante;
+- URI ArCo fittizi per entità non trovate nel KG.</code></pre></figure>
+
+        <h3>Gemini 3.5 extended</h3>
+        <figure class="code"><figcaption>Output A — estratto <span class="tag">Gemini</span></figcaption>
+<pre><code>Informazioni utili:
+- il record del bene 0800675608 attesta testualmente nel campo storico l'appartenenza fisica e contestuale alla Domus del Chirurgo di Rimini;
+- il sito è scientificamente e divulgativamente collegato ai temi della chirurgia e della medicina romana;
+- la musealizzazione e la narrazione storica associano il sito a Eutyches e a un corpus di strumenti chirurgici.
+
+Entità candidate:
+- domus:RomanSurgery e domus:RomanMedicine;
+- domus:SurgicalInstrumentarium;
+- domus:Eutyches.
+
+Avvertenza metodologica:
+- i singoli strumenti non devono essere modellati senza URI puntuali;
+- l'identificazione biografica di Eutyches richiede riscontro bibliografico o catalografico.</code></pre></figure>
+      </details>
+
+      <div class="table-wrap"><table>
+        <thead><tr><th>Modello</th><th>Esito</th><th>Valutazione</th></tr></thead>
+        <tbody>
+          <tr><td>ChatGPT</td><td>Separa fatti, inferenze e ipotesi; evita URI ArCo fittizi.</td><td>Più aderente all'input, pur dovendo intendere “non restituisce” come esito delle sole query documentate.</td></tr>
+          <tr><td>Gemini</td><td>Propone temi, musealizzazione, Eutyches e strumentario.</td><td>Più fecondo sul piano narrativo, ma introduce informazioni non contenute nell'input e bisognose di fonti esterne.</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="note"><strong>Esito.</strong> La separazione proposta da ChatGPT è utile per leggere le risposte. Gli elementi aggiunti da Gemini non entrano nel risultato perché richiederebbero un riscontro esterno.</div>
+    </section>
+
+    <section id="few-shot">
+      <h2><span class="num">03</span>Few-shot: tradurre le proposte in RDF</h2>
+      <hr class="rule">
+      <p>La seconda fase usa esempi positivi e vincoli espliciti per ottenere Turtle minimale. Il <a href="prompts/prompt-B-few-shot.txt">prompt B</a> parla di un collegamento RDF mancante; alla luce della <a href="sparql.html#q3">Q3</a>, la lettura corretta è più circoscritta: il collegamento esiste già in forma indiretta e la proposta serve a renderlo più agevole da interrogare.</p>
+
+      <details class="note">
+        <summary><strong>Leggi il prompt eseguito</strong></summary>
+        <figure class="code"><figcaption>Prompt B <span class="tag">few-shot</span></figcaption>
+<pre><code>RUOLO
+Agisci come knowledge engineer RDF. Devi trasformare descrizioni testuali brevi in triple Turtle minimali, usando ArCo dove possibile e una piccola estensione locale quando il vocabolario ArCo non basta.
+
+PREFISSI DA USARE
+@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+@prefix dcterms: &lt;http://purl.org/dc/terms/&gt; .
+@prefix l0: &lt;https://w3id.org/italia/onto/l0/&gt; .
+@prefix cis: &lt;http://dati.beniculturali.it/cis/&gt; .
+@prefix arco: &lt;https://w3id.org/arco/ontology/arco/&gt; .
+@prefix a-cd: &lt;https://w3id.org/arco/ontology/context-description/&gt; .
+@prefix domus: &lt;https://massimilianoricchiuti.github.io/gepid-domus-chirurgo/resource/&gt; .
+@prefix domus-onto: &lt;https://massimilianoricchiuti.github.io/gepid-domus-chirurgo/ontology/&gt; .
+
+ESEMPIO 1
+Input: "Il bene archeologico X proviene dal sito Y, ma nel KG la provenienza è presente solo come testo libero."
+Output:
+&lt;https://example.org/resource/X&gt; domus-onto:hasArchaeologicalProvenanceSite &lt;https://example.org/resource/Y&gt; .
+# Commento: relazione locale proposta per rendere navigabile una provenienza già attestata testualmente.
+
+ESEMPIO 2
+Input: "Un sito archeologico è connesso narrativamente a una figura storica non presente nel KG."
+Output:
+&lt;https://example.org/resource/SiteY&gt; domus-onto:hasAssociatedFigure domus:FiguraStoricaZ .
+domus:FiguraStoricaZ a domus-onto:HistoricalFigure ;
+  rdfs:label "Figura storica Z"@it .
+# Commento: la figura è creata nel namespace locale; non si inventa un URI ArCo.
+
+ESEMPIO 3
+Input: "Un insieme di reperti è noto come gruppo unitario, ma i singoli reperti non sono enumerati nel KG."
+Output:
+&lt;https://example.org/resource/SiteY&gt; domus-onto:hasFindGroup domus:GruppoReperti .
+domus:GruppoReperti a domus-onto:FindGroup ;
+  rdfs:label "gruppo di reperti"@it .
+# Commento: si modella il gruppo, non i singoli oggetti non verificati.
+
+COMPITO REALE
+Trasforma in Turtle il seguente caso:
+- Il sito ArCo https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8 rappresenta la Domus del Chirurgo.
+- Il bene https://w3id.org/arco/resource/ArchaeologicalProperty/0800675608 contiene nel campo historicalInformation un riferimento testuale alla Domus.
+- Il gap riguarda il mancato collegamento RDF esplicito tra bene e sito, e la mancata rappresentazione come risorse RDF di Eutyches, del corredo di strumenti chirurgici e del tema della chirurgia romana.
+
+VINCOLI
+- Produci Turtle valido.
+- Se introduci proprietà o classi locali, dichiarale con rdfs:label, rdfs:comment, rdfs:domain e rdfs:range quando possibile.
+- Separa le triple in: accettate, suggerite, da verificare.
+- Non usare literal come oggetto quando serve una risorsa.
+- Non dichiarare come certo ciò che è solo narrativo o da verificare.</code></pre></figure>
+      </details>
+
+      <details class="note">
+        <summary><strong>Leggi gli output osservati</strong></summary>
+        <h3>ChatGPT 5.5 extended</h3>
+        <figure class="code"><figcaption>Output B — estratto <span class="tag">ChatGPT</span></figcaption>
+<pre><code>domus-onto:hasArchaeologicalProvenanceSite a rdf:Property ;
+  rdfs:label "ha sito di provenienza archeologica"@it ;
+  rdfs:domain arco:ArchaeologicalProperty ;
+  rdfs:range cis:Site .
+
+&lt;https://w3id.org/arco/resource/ArchaeologicalProperty/0800675608&gt;
+  domus-onto:hasArchaeologicalProvenanceSite
+  &lt;https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8&gt; .
+
+&lt;https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8&gt;
+  domus-onto:hasAssociatedFigure domus:Eutyches ;
+  domus-onto:hasFindGroup domus:CorredoChirurgico ;
+  domus-onto:hasAssociatedTheme domus:ChirurgiaRomana .</code></pre></figure>
+
+        <h3>Gemini 3.5 extended</h3>
+        <figure class="code"><figcaption>Output B — estratto <span class="tag">Gemini</span></figcaption>
+<pre><code>domus-onto:hasArchaeologicalProvenanceSite a rdf:Property ;
+  rdfs:domain arco:ArchaeologicalProperty ;
+  rdfs:range cis:Site ;
+  rdfs:subPropertyOf dcterms:spatial .
+
+domus:assertion-0800675608-provenance a domus-onto:EnrichmentAssertion ;
+  rdf:subject &lt;https://w3id.org/arco/resource/ArchaeologicalProperty/0800675608&gt; ;
+  rdf:predicate domus-onto:hasArchaeologicalProvenanceSite ;
+  rdf:object &lt;https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8&gt; ;
+  domus-onto:confidenceLevel "alta"@it .
+
+&lt;https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8&gt;
+  owl:sameAs &lt;https://www.wikidata.org/entity/Q3713399&gt; .</code></pre></figure>
+      </details>
+
+      <div class="table-wrap"><table>
+        <thead><tr><th>Modello</th><th>Contributo utile</th><th>Problema rilevato</th></tr></thead>
+        <tbody>
+          <tr><td>ChatGPT</td><td>Produce una struttura semplice e facilmente ispezionabile.</td><td>Nell'estratto usa <code>hasAssociatedTheme</code> senza dichiararla e asserisce direttamente entità ancora ipotetiche.</td></tr>
+          <tr><td>Gemini</td><td>Introduce metadati di evidenza e confidenza.</td><td><code>owl:sameAs</code> non è sostenuto dall'input; la reificazione non rende meno vera la tripla che rimane comunque asserita.</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="note"><strong>Esito.</strong> Si conserva soltanto l'idea di un collegamento diretto bene–sito. Eutyches, il corredo e l'allineamento Wikidata non entrano nel risultato perché le <a href="sparql.html">query documentate</a> non forniscono le risorse e le relazioni necessarie.</div>
+    </section>
+
+    <section id="ragionamento-strutturato">
+      <h2><span class="num">04</span>Chain-of-Thought strutturato: rendere controllabili i passaggi</h2>
+      <hr class="rule">
+      <p>Il <a href="prompts/prompt-C-cot-controlled.txt">terzo prompt</a> richiede risultati intermedi verificabili: definizione del <a href="methodology.html#gap">gap</a>, classi e proprietà scelte, triple, rischi e query di controllo. In questo senso il Chain-of-Thought è usato come struttura di revisione, non come fonte di nuovi fatti.</p>
+
+      <details class="note">
+        <summary><strong>Leggi il prompt eseguito</strong></summary>
+        <figure class="code"><figcaption>Prompt C <span class="tag">Chain-of-Thought strutturato</span></figcaption>
+<pre><code>RUOLO
+Agisci come revisore RDF e knowledge engineer per un progetto universitario su ArCo e Domus del Chirurgo.
+
+COMPITO
+Valuta come colmare il gap rilevato dalle query SPARQL. Esegui internamente un'analisi per passaggi, ma NON mostrare un ragionamento esteso. Restituisci solo un output finale sintetico, controllabile e difendibile.
+
+DATI DI PARTENZA
+- Sito: https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8
+- Bene ispezionato: https://w3id.org/arco/resource/ArchaeologicalProperty/0800675608
+- Catena ArCo osservata: bene → a-loc:hasTimeIndexedTypedLocation → TimeIndexedTypedLocation → a-loc:atSite → Site
+- Gap: provenienza e narrazione sono in parte testuali; Eutyches e corredo chirurgico non risultano come risorse RDF nel KG interrogato.
+
+OUTPUT RICHIESTO
+1. Analisi sintetica del gap in massimo 6 righe.
+2. Classi scelte e perché.
+3. Proprietà scelte e perché.
+4. Triple Turtle proposte.
+5. Motivazione breve per ciascun gruppo di triple.
+6. Rischi di errore.
+7. Controlli SPARQL necessari prima dell'eventuale inserimento.
+
+REGOLE
+- Non inventare risorse ArCo.
+- Usa un namespace locale per nuove entità.
+- Se una proprietà ArCo non è semanticamente sicura, crea una proprietà locale e dichiarala come estensione RDFS minima.
+- Preferisci triple prudenti e verificabili.</code></pre></figure>
+      </details>
+
+      <details class="note">
+        <summary><strong>Leggi gli output osservati</strong></summary>
+        <p class="small">Gli estratti conservano le scelte ontologiche, le triple e i rischi più rilevanti. Le omissioni riguardano soltanto passaggi ripetitivi e query di controllo già riassunte nel confronto successivo.</p>
+
+        <h3>ChatGPT 5.5 extended</h3>
+        <figure class="code"><figcaption>Output C — estratto <span class="tag">ChatGPT</span></figcaption>
+<pre><code>Analisi del gap:
+Il grafo descrive la relazione spaziale tra bene e sito, ma non rende
+interrogabili alcune entità nominate nella narrazione. Eutyches non è
+identificato da un IRI e il corredo non è rappresentato come entità autonoma.
+
+Classi proposte:
+- core:Agent per Eutyches;
+- core:AgentRole per l'attribuzione del ruolo di medico;
+- core:Situation per l'associazione interpretativa Eutyches–corredo;
+- ex:SurgicalInstrumentAssemblage, sottoclasse locale di core:Entity.
+
+ex:eutyches a core:Agent ;
+  rdfs:label "Eutyches" .
+
+ex:surgical-instrument-assemblage
+  a ex:SurgicalInstrumentAssemblage ;
+  ex:wasFoundAtSite
+    &lt;https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8&gt; ;
+  dct:source
+    &lt;https://w3id.org/arco/resource/ArchaeologicalProperty/0800675608&gt; .
+
+Rischi dichiarati:
+- attribuire a Eutyches il ruolo di proprietario o abitante senza fonte;
+- usare come fonte il bene 0800675608 senza verificare il testo probatorio;
+- ritenere core:uncertainData sufficiente a documentare l'incertezza;
+- inserire le triple nel grafo ufficiale anziché in un grafo locale separato.</code></pre></figure>
+
+        <h3>Gemini 3.5 extended</h3>
+        <figure class="code"><figcaption>Output C — estratto <span class="tag">Gemini</span></figcaption>
+<pre><code>Analisi del gap:
+Le entità cardine — il medico Eutyches e il suo corredo chirurgico —
+rimangono confinate in descrizioni testuali. Manca la relazione formale
+tra il sito, l'agente che lo abitava e gli strumenti professionali.
+
+Classi proposte:
+- core:Agent per Eutyches;
+- arco:CulturalProperty per il corredo;
+- a-loc:TimeIndexedTypedLocation per collocare il corredo nel sito.
+
+loc:associatedHistoricalFigure
+  rdfs:subPropertyOf core:hasAgent .
+
+loc:ownedBy
+  rdfs:subPropertyOf core:hasAgent .
+
+res:CorredoChirurgico a arco:CulturalProperty ;
+  rdfs:label "Corredo chirurgico di Eutyches"@it ;
+  loc:ownedBy res:Eutyches .
+
+Rischi dichiarati:
+- possibile duplicazione di schede ArCo già esistenti;
+- appiattimento della cronologia stratificata del sito;
+- dominio di core:hasAgent potenzialmente incompatibile con le sottoproprietà.</code></pre></figure>
+      </details>
+
+      <div class="table-wrap"><table>
+        <thead><tr><th>Passaggio</th><th>ChatGPT</th><th>Gemini</th><th>Giudizio</th></tr></thead>
+        <tbody>
+          <tr><td>Definizione del gap</td><td>Riconosce che la relazione spaziale bene–sito è già modellata.</td><td>Presenta Eutyches come abitante e il corredo come suo, senza che l'input lo dimostri.</td><td>ChatGPT formula il gap con maggiore cautela, benché debba ancora verificare che Eutyches compaia nel testo di partenza.</td></tr>
+          <tr><td>Classi</td><td>Usa <code>core:Agent</code>, <code>core:AgentRole</code>, <code>core:Situation</code> e una classe locale per il corredo.</td><td>Tipizza subito il corredo come <code>arco:CulturalProperty</code>.</td><td>La classe locale è più prudente finché non è accertato lo statuto catalografico del corredo.</td></tr>
+          <tr><td>Proprietà</td><td>Ricorre ai pattern ArCo per ruolo e situazione, ma alcuni domini e range devono essere controllati.</td><td>Dichiara <code>ownedBy</code> e <code>associatedHistoricalFigure</code> sottoproprietà di <code>core:hasAgent</code>.</td><td>La soluzione Gemini è impropria: il dominio ereditato può far inferire che sito e corredo siano istanze di <code>core:AgentRole</code>.</td></tr>
+          <tr><td>Controlli</td><td>Propone verifiche su fonte testuale, duplicati, termini riusati e catena bene–sito.</td><td>Controlla Eutyches, corredo e beni collegati al sito.</td><td>Le verifiche di ChatGPT sono più estese; entrambe le serie devono essere rese sintatticamente autonome prima dell'esecuzione.</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="note"><strong>Esito.</strong> Nessuna delle due modellazioni viene trasferita automaticamente nel risultato. La revisione conserva il legame sostenuto dalle query e scarta le relazioni che presuppongono informazioni ulteriori su Eutyches o sul corredo.</div>
+    </section>
+
+    <section id="validazione">
+      <h2><span class="num">05</span>Validazione: distinguere sintassi e verità</h2>
+      <hr class="rule">
+      <p>L'<a href="prompts/prompt-D-validation.txt">ultimo prompt</a> controlla il Turtle originariamente prodotto, conservato come <a href="rdf/domus_enrichment_experimental.ttl"><code>rdf/domus_enrichment_experimental.ttl</code></a>. Un file sintatticamente valido può contenere relazioni non dimostrate: parsing e validazione semantica sono quindi due verifiche diverse.</p>
+      <p class="small">Le query di controllo restano consultabili come parte dell'esperimento: <a href="sparql-checks/check-direct-artifact-site-link.rq">legame diretto bene–sito</a>, <a href="sparql-checks/check-eutyches-labels.rq">occorrenze del nome Eutyches</a>, <a href="sparql-checks/check-existing-subjects-domus.rq">temi già collegati alla Domus</a>, <a href="sparql-checks/check-site-types.rq">tipi del sito</a>, <a href="sparql-checks/check-surgical-instruments-labels.rq">etichette del corredo</a> e <a href="sparql-checks/check-wikidata-sameas.rq">allineamento Wikidata</a>.</p>
+
+      <details class="note">
+        <summary><strong>Leggi il prompt eseguito</strong></summary>
+        <figure class="code"><figcaption>Prompt D <span class="tag">validazione</span></figcaption>
+<pre><code>RUOLO
+Agisci come validatore RDF/Turtle e revisore semantico.
+
+INPUT
+Riceverai un blocco Turtle proposto per arricchire un knowledge graph ArCo sulla Domus del Chirurgo.
+
+COMPITO
+Controlla:
+1. sintassi Turtle;
+2. prefissi dichiarati e usati;
+3. struttura soggetto-predicato-oggetto;
+4. eventuali literal usati dove servirebbe una risorsa;
+5. coerenza semantica rispetto ad ArCo, RDFS, CIS e l0;
+6. duplicazioni plausibili rispetto alle triple già osservate in ArCo;
+7. livello di confidenza per ogni gruppo di triple.
+
+OUTPUT RICHIESTO
+Restituisci una tabella con colonne:
+- Tripla o gruppo di triple;
+- Stato: accettare / correggere / scartare / verificare;
+- Motivo;
+- Correzione proposta;
+- Query ASK o SELECT consigliata.
+
+VINCOLI
+- Non aggiungere nuove triple non richieste.
+- Non cambiare i namespace senza motivazione.
+- Se non puoi verificare una cosa, scrivi "da verificare".</code></pre></figure>
+      </details>
+
+      <details class="note">
+        <summary><strong>Leggi gli output osservati</strong></summary>
+        <p class="small">Le tabelle originali sono ridotte alle righe che incidono sulle decisioni del progetto. Stati e motivazioni restano invariati.</p>
+
+        <h3>ChatGPT 5.5 extended</h3>
+        <figure class="code"><figcaption>Output D — estratto <span class="tag">ChatGPT</span></figcaption>
+<pre><code>Sintassi e prefissi — ACCETTARE
+Turtle valido; il parser carica 113 triple e tutti i prefissi dichiarati
+sono utilizzati. La validità sintattica non certifica il contenuto.
+
+FindGroup rdfs:subClassOf a-cd:Subject — CORREGGERE
+a-cd:Subject rappresenta un soggetto o motivo; un corredo è un insieme.
+Correzione: FindGroup rdfs:subClassOf l0:Collection.
+
+hasArchaeologicalProvenanceSite — VERIFICARE
+Dominio e range sono formalmente corretti, ma "provenienza archeologica"
+è più forte della localizzazione ArCo già osservata.
+
+Sito a-cd:hasSubject RomanSurgery, RomanMedicine — CORREGGERE
+Non vi è incompatibilità logica di dominio; l'uso è però semanticamente
+improprio. Correzione: dcterms:subject e temi tipizzati l0:Topic.
+
+owl:sameAs Wikidata Q3713399 — CORREGGERE
+La corrispondenza è plausibile, ma l'identità rigorosa non è dimostrata.
+Correzione provvisoria: rdfs:seeAlso.
+
+Sito hasAssociatedFigure Eutyches — VERIFICARE
+La reificazione con confidenza bassa non attenua la tripla già asserita.
+La tripla diretta va esclusa fino a verifica bibliografica o museale.</code></pre></figure>
+
+        <h3>Gemini 3.5 extended</h3>
+        <figure class="code"><figcaption>Output D — estratto dalla parte disponibile <span class="tag">Gemini</span></figcaption>
+<pre><code>Estensione ontologica locale — CORREGGERE
+FindGroup non deve essere sottoclasse di a-cd:Subject.
+Correzione proposta: l0:Collection; domain e range dei metadati locali
+devono essere dichiarati.
+
+Ancoraggio del sito esistente — ACCETTARE
+URI ArCo, cis:Site, l0:name e rdfs:label sono considerati coerenti.
+
+Provenienza bene e reificazione — ACCETTARE
+Dominio e range locali e reificazione RDF sono giudicati corretti.
+
+Soggetti e allineamento Wikidata — CORREGGERE
+Gemini attribuisce ad a-cd:hasSubject un dominio primario
+arco:CulturalProperty e propone una proprietà locale per il sito;
+owl:sameAs viene definito corretto, ma da verificare.
+
+SurgicalInstrumentarium — CORREGGERE
+Confidenza e stato devono qualificare soltanto EnrichmentAssertion,
+non anche l'entità del corredo.
+
+Eutyches — VERIFICARE
+L'eventuale esistenza di un URI ArCo deve essere controllata prima
+della pubblicazione della risorsa locale.</code></pre></figure>
+        <p class="small">La risposta Gemini ricevuta si interrompe durante la query finale su Eutyches. L'estratto comprende pertanto soltanto le righe complete disponibili.</p>
+      </details>
+
+      <div class="table-wrap"><table>
+        <thead><tr><th>Controllo</th><th>ChatGPT</th><th>Gemini</th><th>Decisione</th></tr></thead>
+        <tbody>
+          <tr><td>Parsing</td><td>Conferma 113 triple e dieci prefissi utilizzati.</td><td>Giudica valida la sintassi.</td><td>Il Turtle è sintatticamente valido; questa verifica non riguarda la verità delle asserzioni.</td></tr>
+          <tr><td><code>FindGroup</code></td><td>Propone <code>l0:Collection</code>.</td><td>Propone <code>l0:Collection</code> o, più genericamente, <code>l0:Entity</code>.</td><td><code>l0:Collection</code> sarebbe la correzione più informativa, ma il corredo non entra nel Turtle finale.</td></tr>
+          <tr><td>Relazione bene–sito</td><td>Osserva che “provenienza” è più forte di “localizzazione”.</td><td>La considera sostenibile sulla base di dominio, range e reificazione.</td><td>Nel <a href="rdf.html#soluzione">Turtle finale</a> si usa il più neutro “collegamento al contesto archeologico”.</td></tr>
+          <tr><td>Temi del sito</td><td>Rileva un uso semanticamente improprio di <code>a-cd:hasSubject</code> e propone <code>dcterms:subject</code>.</td><td>Rileva il problema, ma lo motiva con un vincolo di dominio non confermato dall'ontologia.</td><td>La correzione sarebbe necessaria, ma i temi sono esclusi perché non sostenuti dall'input SPARQL.</td></tr>
+          <tr><td>Eutyches e corredo</td><td>Distingue correttezza strutturale e attendibilità del contenuto.</td><td>Ne segnala la necessità di verifica e corregge la collocazione dei metadati.</td><td>Escluderli dal Turtle finale: le <a href="sparql.html#q4">Q4</a> e <a href="sparql.html#q5">Q5</a> non individuano una risorsa attribuibile al corredo della Domus; la <a href="sparql.html#q6">Q6</a> non identifica il medico pertinente.</td></tr>
+          <tr><td><code>owl:sameAs</code></td><td>Propone temporaneamente <code>rdfs:seeAlso</code>.</td><td>Lo considera corretto, ma da verificare.</td><td>Escludere <code>owl:sameAs</code> finché non è dimostrata l'identità delle entità denotate.</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="note"><strong>Esito della validazione.</strong> ChatGPT distingue con maggiore nettezza correttezza formale e forza dell'evidenza. Gemini individua alcune correzioni utili, ma accetta troppo rapidamente la provenienza e motiva in modo inesatto il problema di <code>a-cd:hasSubject</code>.</div>
+    </section>
+
+    <section id="confronto">
+      <h2><span class="num">06</span>Confronto critico fra i modelli</h2>
+      <hr class="rule">
+      <p>Le risposte non consentono di decretare un vincitore generale, poiché le quattro fasi svolgono compiti diversi. Nelle esecuzioni osservate, ChatGPT applica più spesso cautele esplicite; Gemini produce collegamenti più immediati, ma tende a trasformare la narrazione in relazioni ontologiche più forti delle evidenze disponibili.</p>
+
+      <div class="table-wrap"><table>
+        <thead><tr><th>Criterio</th><th>ChatGPT 5.5 extended</th><th>Gemini 3.5 extended</th></tr></thead>
+        <tbody>
+          <tr><td>Aderenza alle evidenze</td><td>Distingue più spesso relazione osservata, scorciatoia proposta e attribuzione da verificare.</td><td>Introduce abitazione, proprietà del corredo e cronologia come dati già acquisiti.</td></tr>
+          <tr><td>Modellazione</td><td>Propone pattern n-ari per ruolo e situazione, più cauti ma da verificare nei dettagli.</td><td>Preferisce relazioni dirette, più leggibili ma semanticamente troppo cogenti.</td></tr>
+          <tr><td>Riuso dei vocabolari</td><td>Tenta il riuso di <code>core:AgentRole</code> e <code>core:Situation</code>, affiancandovi una classe locale.</td><td>Riusa <code>arco:CulturalProperty</code> e il pattern di localizzazione, ma estende impropriamente <code>core:hasAgent</code>.</td></tr>
+          <tr><td>Validazione</td><td>Separa sintassi, coerenza semantica e attendibilità dell'asserzione.</td><td>Individua correzioni pertinenti, ma confonde talvolta uso semantico e vincolo formale.</td></tr>
+          <tr><td>Completezza</td><td>Copre tutte le voci richieste nei quattro prompt e sviluppa controlli estesi su fonti, duplicati e catene RDF.</td><td>Copre i nuclei richiesti, ma la risposta di validazione ricevuta si interrompe durante la query finale su Eutyches.</td></tr>
+          <tr><td>Formato</td><td>Segue con regolarità le sezioni richieste e produce Turtle facilmente ispezionabile, pur con termini da correggere.</td><td>Mantiene una struttura leggibile, ma combina talvolta triple dirette e reificazione senza separare le asserzioni da verificare.</td></tr>
+          <tr><td>Uso nel progetto</td><td>Base critica per definire i controlli e la selezione finale.</td><td>Controprova utile per riconoscere sovra-asserzioni e scorciatoie ontologiche rischiose.</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="errori">
+      <h2><span class="num">07</span>Errori, eccessi e limiti riconosciuti</h2>
+      <hr class="rule">
+      <p>Le risposte hanno aiutato a formulare il problema, ma hanno anche mostrato errori riconoscibili. Il controllo finale ha eliminato dal <a href="rdf.html">risultato RDF</a> tutto ciò che non discende dalle <a href="sparql.html">query eseguite</a>.</p>
+
+      <div class="table-wrap"><table>
+        <thead><tr><th>Errore o eccesso</th><th>Perché è un problema</th><th>Come è stato gestito</th></tr></thead>
+        <tbody>
+          <tr><td>Presentare Eutyches come abitante, proprietario o medico collegato formalmente al sito.</td><td>L'input non dimostra queste relazioni RDF.</td><td>Eutyches non compare nel Turtle finale.</td></tr>
+          <tr><td>Creare il corredo o i singoli strumenti come nuove risorse.</td><td>Le <a href="sparql.html#q4">Q4</a> e <a href="sparql.html#q5">Q5</a> non forniscono URI attribuibili al corredo specifico della Domus né un inventario riusabile.</td><td>Nessuna nuova entità è stata aggiunta.</td></tr>
+          <tr><td>Usare <code>owl:sameAs</code> verso Wikidata senza una verifica puntuale.</td><td><code>owl:sameAs</code> afferma identità, non una semplice somiglianza o pertinenza.</td><td>L'allineamento proposto dai modelli è escluso.</td></tr>
+          <tr><td>Usare <code>a-cd:hasSubject</code> per collegare temi al sito.</td><td>L'impiego risulta semanticamente improprio nel contesto analizzato.</td><td>I temi non sono inclusi nell'arricchimento.</td></tr>
+          <tr><td>Credere che metadati di confidenza rendano ipotetica una tripla già asserita.</td><td>La reificazione descrive l'asserzione, ma non annulla la tripla diretta.</td><td>Le affermazioni non sostenute sono state rimosse, non soltanto etichettate.</td></tr>
+        </tbody>
+      </table></div>
+
+      <p>L'esperimento mostra quindi che un LLM può assistere la trasformazione di risultati SPARQL in proposte RDF e far emergere rischi di modellazione. Non dimostra che una tecnica di prompting sia superiore alle altre, né che le entità suggerite esistano nel knowledge graph. Il risultato utilizzabile nasce soltanto dal confronto con le evidenze e dalla successiva validazione.</p>
+
+      <div class="table-wrap"><table>
+        <thead><tr><th>Limite</th><th>Effetto sulla valutazione</th></tr></thead>
+        <tbody>
+          <tr><td>I quattro prompt svolgono compiti diversi.</td><td>Non è possibile attribuire le differenze di qualità alla sola tecnica di prompting.</td></tr>
+          <tr><td>È documentata una sola esecuzione per modello e fase.</td><td>Le differenze osservate non possono essere generalizzate.</td></tr>
+          <tr><td>Mancano parametri e identificativi tecnici completi.</td><td>L'esperimento è ricostruibile nei contenuti, ma non perfettamente replicabile.</td></tr>
+          <tr><td>Le query lessicali hanno copertura limitata.</td><td>Un risultato vuoto segnala una mancata individuazione, non una prova di inesistenza.</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div><strong>Progetto Metodologie e Tecniche di Simulazione</strong> Università di Bologna<br>
+      <span class="small">Codice e materiali disponibili nel <a href="https://github.com/paracool/mts-unibo">repository GitHub</a>.</span></div>
+      <div class="small">Sito statico pubblicato con GitHub Pages.</div>
+    </div>
+  </footer>
+  <script src="main.js"></script>
+</body>
+</html>
+
+

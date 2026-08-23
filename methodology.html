@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Progetto GEPID — Metodologia</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Salta al contenuto</a>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html"><span class="mark">GEPID</span><span class="sub">Progetto MTS</span></a>
+      <button class="nav-toggle" aria-label="Apri menu">☰</button>
+      <nav class="nav" aria-label="Navigazione principale">
+        <a href="index.html">Home</a>
+        <a href="methodology.html">Metodologia</a>
+        <a href="sparql.html">SPARQL</a>
+        <a href="prompts.html">Prompt e LLM</a>
+        <a href="rdf.html" aria-label="Arricchimento RDF">RDF</a>
+        <a href="conclusions.html">Conclusioni</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="hero">
+      <p class="eyebrow">Sezione · Approccio</p>
+      <h1><span class="accent">Metodologia</span></h1>
+      <p class="lede">Come abbiamo individuato il gap, l'approccio generale e gli strumenti usati.</p>
+    </section>
+
+    <section id="gap-discovery">
+      <h2><span class="num">01</span>Come abbiamo individuato il gap</h2>
+      <hr class="rule">
+      <p>
+        Siamo partiti senza conoscere l'URI della Domus, applicando la strategia di <em>vocabulary discovery</em>:
+        ricerca per etichetta, ispezione dei tipi, esplorazione delle proprietà entranti e uscenti. Il codice completo
+        delle query è nella <a href="sparql.html">sezione SPARQL</a>; qui raccontiamo il percorso logico.
+      </p>
+      <ol class="steps">
+        <li>
+          <h3><a href="sparql.html#q1">Ricerca per etichetta e tipo</a></h3>
+          <p>Una <code>FILTER regex</code> sulle <code>rdfs:label</code> restituisce sei risorse associate alla Domus: un'opera, un istituto o luogo della cultura, una sede, un indirizzo, un ruolo amministrativo e il nodo ArCo <code>resource/Site/3416…</code>. Quest'ultimo diventa l'ancora delle query successive.</p>
+        </li>
+        <li>
+          <h3><a href="sparql.html#q2">Entranti e uscenti del sito</a></h3>
+          <p>Una <code>UNION</code> mostra insieme le due direzioni. In uscita il sito espone soltanto cinque proprietà; in entrata
+          compaiono due <code>owl:sameAs</code> e cinque nodi <code>TimeIndexedTypedLocation</code>. Non emergono persone o
+          riferimenti diretti al corredo chirurgico.</p>
+        </li>
+        <li>
+          <h3><a href="sparql.html#q3">Dai nodi di localizzazione ai beni</a></h3>
+          <p>La query percorre il pattern
+          <code>bene → hasTimeIndexedTypedLocation → TimeIndexedTypedLocation → atSite → Site</code>
+          e raggiunge cinque beni: un mosaico, un bacile, un capitello corinzio, una vasca e un frammento di statua di Ermarco.
+          Nessuno appartiene al corredo chirurgico.</p>
+        </li>
+        <li>
+          <h3><a href="sparql.html#q4">Ricerca globale del corredo</a></h3>
+          <p>La ricerca lessicale estesa all'intero grafo raggiunge il limite di 100 righe e restituisce risultati eterogenei: una raccolta veterinaria, una fotografia, nodi di vocabolario e molte corrispondenze ambigue. Nessuna riga identifica il corredo della Domus.</p>
+        </li>
+        <li>
+          <h3><a href="sparql.html#q5">Verifica nel namespace ArCo</a></h3>
+          <p>Il filtro <code>STRSTARTS</code> elimina le risorse esterne, ma l'output raggiunge ancora il limite di 100 righe: due nodi di tipo «bisturi» e novantotto risorse «scalpello». La polisemia rimane e nessun URI è attribuibile al corredo della Domus.</p>
+        </li>
+        <li>
+          <h3><a href="sparql.html#q6">Ricerca del medico Eutyches</a></h3>
+          <p>La ricerca restituisce soltanto «Urna del vicario Eutyches», una risorsa di tipo <code>a-cd:Title</code>
+          priva di collegamenti con la Domus. Il medico non emerge come persona o entità autonoma pertinente al progetto.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section id="gap">
+      <h2><span class="num">02</span>Il gap, su quattro livelli</h2>
+      <hr class="rule">
+      <p>La lacuna non coincide con l'assenza del lessico necessario: ArCo contiene nodi di tipo etichettati «bisturi» e numerose risorse lessicalmente affini. Il problema è strutturale e di copertura catalografica del caso specifico.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Livello</th><th>Cosa abbiamo osservato</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Sito</strong></td><td>Il nodo del sito è quasi vuoto: solo tipo, indirizzo ed etichetta. Nessuna datazione, storia, descrizione o immagine per uno dei siti romani più noti d'Italia.</td></tr>
+            <tr><td><strong>Relazione</strong></td><td>Dal sito si raggiungono solo 5 beni attraverso il nodo intermedio <code>TimeIndexedTypedLocation</code>; non esiste un collegamento diretto sito↔bene.</td></tr>
+            <tr><td><strong>Collezione / narrazione</strong></td><td>Le query restituiscono corrispondenze lessicali e nodi di tipo non attribuibili al corredo specifico della Domus; Eutyches non emerge come persona collegata al sito.</td></tr>
+            <tr><td><strong>Frammentazione</strong></td><td>Tre URI per lo stesso luogo, riconciliati solo da <code>owl:sameAs</code> fra ArCo e i due record MiBACT–Luoghi.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note">
+        <strong>In sintesi.</strong> In ArCo la Domus del Chirurgo esiste come <em>luogo</em>, ma è scollegata dalla ricchezza
+        archeologica e narrativa che la rende celebre. La conoscenza esiste sul Web aperto (Wikipedia/Wikidata) ma non nel
+        knowledge graph del patrimonio: è una lacuna di <strong>interconnessione</strong> e di <strong>completezza della collezione</strong>.
+      </div>
+    </section>
+
+    <section>
+      <h2><span class="num">03</span>Dal gap agli LLM</h2>
+      <hr class="rule">
+      <p>
+        Stabilita la lacuna in modo verificabile, l'abbiamo usata come banco di prova per i Large Language Models:
+        chiedere ai modelli di proporre i collegamenti mancanti sito↔beni, di riconoscere il corredo chirurgico ed Eutyches,
+        e di generarne una rappresentazione nell'ontologia ArCo. Il confronto fra le informazioni esterne richiamate dai modelli e
+        ciò che è realmente nel grafo è terreno fertile per osservare allucinazioni e differenze di comportamento.
+        I dettagli sono nella <a href="prompts.html">sezione Prompt e LLM</a>; la selezione delle sole affermazioni
+        sostenute dalle query e la loro traduzione finale sono documentate nella pagina
+        <a href="rdf.html">Arricchimento RDF</a>.
+      </p>
+    </section>
+
+    <section>
+      <h2><span class="num">04</span>Strumenti usati</h2>
+      <hr class="rule">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Strumento</th><th>Scopo</th></tr></thead>
+          <tbody>
+            <tr><td><a href="https://yasgui.org" target="_blank" rel="noopener">YASGUI</a></td><td>Scrittura ed esecuzione delle query SPARQL.</td></tr>
+            <tr><td><a href="https://dati.cultura.gov.it/sparql" target="_blank" rel="noopener">Endpoint SPARQL di ArCo</a></td><td>Interrogazione del knowledge graph del patrimonio.</td></tr>
+            <tr><td><a href="https://query.wikidata.org" target="_blank" rel="noopener">Wikidata Query Service</a></td><td>Dati di confronto sull'item Q3713399.</td></tr>
+            <tr><td>Interfacce / API degli LLM</td><td>Esecuzione dei prompt (modelli elencati nella <a href="prompts.html">pagina dedicata</a>).</td></tr>
+            <tr><td><a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a></td><td>Pubblicazione di questo sito.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div><strong>Progetto Metodologie e Tecniche di Simulazione</strong> Università di Bologna<br>
+      <span class="small">Codice e materiali disponibili nel <a href="https://github.com/paracool/mts-unibo">repository GitHub</a>.</span></div>
+      <div class="small">Sito statico realizzato per GitHub Pages.</div>
+    </div>
+  </footer>
+  <script src="main.js"></script>
+</body>
+</html>
+
+

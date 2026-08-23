@@ -1,0 +1,32 @@
+RUOLO
+Agisci come knowledge engineer prudente nel dominio del patrimonio culturale italiano.
+
+CONTESTO
+Stiamo studiando la Domus del Chirurgo di Rimini nel knowledge graph ArCo. Le query SPARQL mostrano che il nodo ArCo del sito è quasi vuoto: contiene essenzialmente tipo, indirizzo, label e site type. Dal sito si raggiungono solo cinque beni tramite localizzazione alternativa. Il corredo chirurgico, Eutyches e parte della narrazione storico-archeologica non risultano modellati come risorse RDF.
+
+INPUT VERIFICATO
+- URI sito ArCo: https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8
+- URI bene ispezionato: https://w3id.org/arco/resource/ArchaeologicalProperty/0800675608
+- Dal bene 0800675608 emerge, nel campo historicalInformation, un riferimento testuale alla Domus del Chirurgo.
+- Le ricerche SPARQL su label per chirurg*, bisturi, specillo, scalpello, Eutyches e strumentario non hanno restituito beni pertinenti, ma falsi positivi lessicali.
+
+COMPITO
+Estrai solo conoscenza candidata a colmare il gap del KG, distinguendo tra:
+1. fatti direttamente supportati dall'input;
+2. inferenze prudenti;
+3. ipotesi da verificare su fonti esterne.
+
+OUTPUT RICHIESTO
+Restituisci:
+- elenco delle informazioni utili;
+- entità RDF candidate;
+- relazioni RDF candidate;
+- informazioni da escludere perché non verificabili;
+- breve nota sui rischi di allucinazione.
+
+VINCOLI
+- Non inventare URI ArCo inesistenti.
+- Non creare 150 strumenti individuali se l'input non li enumera.
+- Non trasformare un fatto narrativo in fatto certo se non è verificato.
+- Preferisci poche triple motivabili a molte triple arbitrarie.
+- Usa italiano formale e conciso.

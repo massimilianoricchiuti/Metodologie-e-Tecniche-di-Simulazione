@@ -1,0 +1,4 @@
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+ASK {
+  <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8> owl:sameAs <https://www.wikidata.org/entity/Q3713399> .
+}
