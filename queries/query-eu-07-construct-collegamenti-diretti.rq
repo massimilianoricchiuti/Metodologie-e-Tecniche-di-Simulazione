@@ -1,0 +1,31 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX cis: <http://dati.beniculturali.it/cis/>
+PREFIX arco: <https://w3id.org/arco/ontology/arco/>
+PREFIX a-loc: <https://w3id.org/arco/ontology/location/>
+PREFIX domus-onto: <https://massimilianoricchiuti.github.io/gepid-domus-chirurgo/ontology/>
+
+# Materializza in un grafo locale i collegamenti diretti bene-sito
+# derivati dal pattern di localizzazione già documentato dalla Q3.
+CONSTRUCT {
+  domus-onto:hasArchaeologicalContextSite a rdf:Property ;
+    rdfs:label "has archaeological context site"@en ,
+               "è collegato al sito archeologico"@it ;
+    rdfs:comment "Collega direttamente un bene archeologico al sito già raggiunto tramite la localizzazione indicizzata nel tempo, senza sostituire il pattern ArCo esistente."@it ;
+    rdfs:domain arco:ArchaeologicalProperty ;
+    rdfs:range cis:Site ;
+    rdfs:subPropertyOf dcterms:spatial .
+
+  ?entity domus-onto:hasArchaeologicalContextSite ?site .
+}
+WHERE {
+  VALUES ?site {
+    <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8>
+  }
+
+  ?entity a arco:ArchaeologicalProperty ;
+          a-loc:hasTimeIndexedTypedLocation ?location .
+  ?location a a-loc:TimeIndexedTypedLocation ;
+            a-loc:atSite ?site .
+}

@@ -20,8 +20,9 @@ Gli output forniti per ChatGPT 5.5 extended e Gemini 3.5 extended non sono stati
 - `conclusions.html`: riunisce relazione, sfide, portata dell'arricchimento e sviluppi futuri.
 - `README.md`: aggiornata la struttura dei file e la checklist.
 - `LLM_INTEGRATION_SUMMARY.md`: aggiornata questa sintesi.
-- `rdf/domus_enrichment.ttl`: ridotto alla definizione minima della proprietà locale e al solo collegamento bene–sito sostenuto dalla [Q3](sparql.html#q3).
+- `rdf/domus_enrichment.ttl`: ridotto alla definizione minima della proprietà locale e ai soli collegamenti bene–sito sostenuti dalla [Q3](sparql.html#q3), poi estesi ai cinque beni mediante la Q7.
 - `rdf/validation-report.md`: aggiornato con la funzione e il conteggio dei due Turtle mantenuti.
+- `sparql.html` e `queries/query-eu-07-construct-collegamenti-diretti.rq`: aggiunta la query `CONSTRUCT` che materializza nel grafo locale i cinque collegamenti bene–sito già dimostrati dalla Q3.
 
 ## File rimossi
 
@@ -31,8 +32,6 @@ Gli output forniti per ChatGPT 5.5 extended e Gemini 3.5 extended non sono stati
 
 ## Verifica
 
-- `rdf/domus_enrichment.ttl`: 8 triple, parsing riuscito con RDFLib.
+- `rdf/domus_enrichment.ttl`: 12 triple, parsing riuscito con RDFLib; sette definiscono la proprietà locale e cinque sono generate dalla Q7.
 - `rdf/domus_enrichment_experimental.ttl`: 113 triple, parsing riuscito con RDFLib; conservato soltanto come output dell'esperimento.
 - La nuova visualizzazione riusa colori, tipografia e componenti del sito.
-
-

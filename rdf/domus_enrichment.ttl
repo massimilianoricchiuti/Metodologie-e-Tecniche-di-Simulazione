@@ -7,9 +7,9 @@
 
 #################################################################
 # Arricchimento finale
-# Il collegamento esplicita in forma diretta la relazione già
-# documentata dalla query Q3 attraverso il pattern di
-# localizzazione ArCo.
+# I collegamenti esplicitano in forma diretta le relazioni già
+# documentate dalla query Q3 attraverso il pattern di
+# localizzazione ArCo e materializzate dalla query CONSTRUCT Q7.
 #################################################################
 
 domus-onto:hasArchaeologicalContextSite a rdf:Property ;
@@ -21,5 +21,21 @@ domus-onto:hasArchaeologicalContextSite a rdf:Property ;
   rdfs:subPropertyOf dcterms:spatial .
 
 <https://w3id.org/arco/resource/ArchaeologicalProperty/0800675608>
+  domus-onto:hasArchaeologicalContextSite
+  <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8> .
+
+<https://w3id.org/arco/resource/ArchaeologicalProperty/0800675609>
+  domus-onto:hasArchaeologicalContextSite
+  <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8> .
+
+<https://w3id.org/arco/resource/ArchaeologicalProperty/0800675610>
+  domus-onto:hasArchaeologicalContextSite
+  <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8> .
+
+<https://w3id.org/arco/resource/ArchaeologicalProperty/0800675611>
+  domus-onto:hasArchaeologicalContextSite
+  <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8> .
+
+<https://w3id.org/arco/resource/ArchaeologicalProperty/0800675612>
   domus-onto:hasArchaeologicalContextSite
   <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8> .

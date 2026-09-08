@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Sei query SPARQL sul Knowledge Graph ArCo per analizzare la rappresentazione della Domus del Chirurgo, del corredo chirurgico e del medico Eutyches.">
+  <meta name="description" content="Sette query SPARQL sul Knowledge Graph ArCo: sei interrogazioni per analizzare il gap della Domus del Chirurgo e una CONSTRUCT per generare un grafo RDF locale.">
   <title>Progetto GEPID — Query SPARQL</title>
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -26,10 +26,10 @@
 
   <main id="main-content">
     <section class="hero">
-      <p class="eyebrow">Query SPARQL · ArCo · Analisi del gap</p>
+      <p class="eyebrow">Query SPARQL · ArCo · Analisi e costruzione</p>
       <h1><span class="accent">Alla ricerca del medico e del corredo chirurgico</span></h1>
-      <p class="lede">Sei query, tutte condotte sul dataset <a href="https://dati.cultura.gov.it/sparql" target="_blank" rel="noopener">ArCo</a>, per verificare se il celebre corredo di strumenti chirurgici e la figura del medico Eutyches siano rappresentati nel Knowledge Graph come risorse a s&eacute; stanti, oppure solo come menzione testuale. Il percorso parte dal ritrovamento del sito (<a href="#q1">Q1</a>) e ne mappa tutte le relazioni dirette (<a href="#q2">Q2</a>), scoprendo che conducono, attraverso nodi intermedi, soltanto a cinque beni archeologici minori &mdash; un mosaico, un bacile, un capitello, una vasca, un frammento di statua &mdash; nessuno riconducibile alla chirurgia (<a href="#q3">Q3</a>). Allargando la ricerca a tutto il grafo emergono corrispondenze lessicali eterogenee &mdash; una raccolta veterinaria, una risorsa fotografica, nodi etichettati «bisturi» e molte occorrenze ambigue di «scalpello» &mdash; ma nessun URI attribuibile al corredo della Domus (<a href="#q4">Q4</a>, <a href="#q5">Q5</a>). La ricerca di Eutyches, infine, restituisce soltanto un titolo omonimo e non pertinente: non emerge come persona n&eacute; in relazione alla Domus (<a href="#q6">Q6</a>).</p>
-      <p class="lede">Il risultato complessivo conferma e rafforza il gap individuato nel resto del progetto: il grafo dispone di categorie e termini pertinenti, ma le query non individuano una risorsa catalografica attribuibile al corredo della Domus del Chirurgo.</p>
+      <p class="lede">Le prime sei query, condotte sul dataset <a href="https://dati.cultura.gov.it/sparql" target="_blank" rel="noopener">ArCo</a>, verificano se il celebre corredo di strumenti chirurgici e la figura del medico Eutyches siano rappresentati nel Knowledge Graph come risorse a s&eacute; stanti, oppure solo come menzione testuale. Il percorso parte dal ritrovamento del sito (<a href="#q1">Q1</a>) e ne mappa tutte le relazioni dirette (<a href="#q2">Q2</a>), scoprendo che conducono, attraverso nodi intermedi, soltanto a cinque beni archeologici minori &mdash; un mosaico, un bacile, un capitello, una vasca, un frammento di statua &mdash; nessuno riconducibile alla chirurgia (<a href="#q3">Q3</a>). Allargando la ricerca a tutto il grafo emergono corrispondenze lessicali eterogenee &mdash; una raccolta veterinaria, una risorsa fotografica, nodi etichettati «bisturi» e molte occorrenze ambigue di «scalpello» &mdash; ma nessun URI attribuibile al corredo della Domus (<a href="#q4">Q4</a>, <a href="#q5">Q5</a>). La ricerca di Eutyches, infine, restituisce soltanto un titolo omonimo e non pertinente: non emerge come persona n&eacute; in relazione alla Domus (<a href="#q6">Q6</a>).</p>
+      <p class="lede">Il risultato complessivo conferma il gap individuato nel resto del progetto. La <a href="#q7">Q7</a> compie poi un'operazione diversa: mediante <code>CONSTRUCT</code> trasforma i cinque percorsi bene–localizzazione–sito già provati dalla Q3 in un grafo RDF locale con collegamenti bene–sito diretti, senza modificare l'endpoint ArCo e senza creare entità per il corredo o per Eutyches.</p>
       <div class="pills" id="query-index" aria-label="Indice delle query">
         <a class="pill" href="#q1">Q1</a>
         <a class="pill" href="#q2">Q2</a>
@@ -37,6 +37,7 @@
         <a class="pill" href="#q4">Q4</a>
         <a class="pill" href="#q5">Q5</a>
         <a class="pill" href="#q6">Q6</a>
+        <a class="pill" href="#q7">Q7 · CONSTRUCT</a>
       </div>
     </section>
 
@@ -294,18 +295,81 @@
       <p class="back-link"><a href="#query-index" aria-label="Torna all'indice delle query">↑ Torna all'indice delle query</a></p>
     </section>
 
+    <section id="q7">
+      <h2><span class="num">Q7</span>CONSTRUCT: materializzazione dei collegamenti diretti bene–sito</h2>
+      <hr class="rule">
+      <div class="kwbox">
+        <p class="why">La Q3 ha già dimostrato che cinque beni archeologici raggiungono la Domus attraverso il pattern <code>bene → hasTimeIndexedTypedLocation → TimeIndexedTypedLocation → atSite → Site</code>. La Q7 usa quel medesimo pattern come condizione nel blocco <code>WHERE</code> e costruisce un sotto-grafo locale più conciso: definisce la proprietà <code>domus-onto:hasArchaeologicalContextSite</code> e la applica soltanto ai beni per i quali il percorso ArCo è effettivamente presente. La query non deduce una provenienza più forte, non cataloga il corredo e non introduce Eutyches.</p>
+      </div>
+      <figure class="code">
+        <figcaption><a href="queries/query-eu-07-construct-collegamenti-diretti.rq">query-eu-07-construct-collegamenti-diretti.rq</a> <span class="tag">CONSTRUCT &middot; WHERE &middot; VALUES</span></figcaption>
+<pre><code><span class="pre">PREFIX</span> rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;
+<span class="pre">PREFIX</span> rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
+<span class="pre">PREFIX</span> dcterms: &lt;http://purl.org/dc/terms/&gt;
+<span class="pre">PREFIX</span> cis: &lt;http://dati.beniculturali.it/cis/&gt;
+<span class="pre">PREFIX</span> arco: &lt;https://w3id.org/arco/ontology/arco/&gt;
+<span class="pre">PREFIX</span> a-loc: &lt;https://w3id.org/arco/ontology/location/&gt;
+<span class="pre">PREFIX</span> domus-onto: &lt;https://massimilianoricchiuti.github.io/gepid-domus-chirurgo/ontology/&gt;
+
+<span class="kw">CONSTRUCT</span> {
+  domus-onto:hasArchaeologicalContextSite a rdf:Property ;
+    rdfs:label <span class="str">"has archaeological context site"@en</span> ,
+               <span class="str">"è collegato al sito archeologico"@it</span> ;
+    rdfs:comment <span class="str">"Collega direttamente un bene archeologico al sito già raggiunto tramite la localizzazione indicizzata nel tempo, senza sostituire il pattern ArCo esistente."@it</span> ;
+    rdfs:domain arco:ArchaeologicalProperty ;
+    rdfs:range cis:Site ;
+    rdfs:subPropertyOf dcterms:spatial .
+
+  <span class="var">?entity</span> domus-onto:hasArchaeologicalContextSite <span class="var">?site</span> .
+}
+<span class="kw">WHERE</span> {
+  <span class="kw">VALUES</span> <span class="var">?site</span> {
+    &lt;https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8&gt;
+  }
+  <span class="var">?entity</span> a arco:ArchaeologicalProperty ;
+          a-loc:hasTimeIndexedTypedLocation <span class="var">?location</span> .
+  <span class="var">?location</span> a a-loc:TimeIndexedTypedLocation ;
+            a-loc:atSite <span class="var">?site</span> .
+}</code></pre>
+      </figure>
+      <a class="runlink" href="https://dati.cultura.gov.it/sparql?query=PREFIX%20rdf%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F1999%2F02%2F22-rdf-syntax-ns%23%3E%0APREFIX%20rdfs%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23%3E%0APREFIX%20dcterms%3A%20%3Chttp%3A%2F%2Fpurl.org%2Fdc%2Fterms%2F%3E%0APREFIX%20cis%3A%20%3Chttp%3A%2F%2Fdati.beniculturali.it%2Fcis%2F%3E%0APREFIX%20arco%3A%20%3Chttps%3A%2F%2Fw3id.org%2Farco%2Fontology%2Farco%2F%3E%0APREFIX%20a-loc%3A%20%3Chttps%3A%2F%2Fw3id.org%2Farco%2Fontology%2Flocation%2F%3E%0APREFIX%20domus-onto%3A%20%3Chttps%3A%2F%2Fmassimilianoricchiuti.github.io%2Fgepid-domus-chirurgo%2Fontology%2F%3E%0ACONSTRUCT%20%7B%0A%20%20domus-onto%3AhasArchaeologicalContextSite%20a%20rdf%3AProperty%20%3B%0A%20%20%20%20rdfs%3Alabel%20%22has%20archaeological%20context%20site%22%40en%20%2C%20%22%C3%A8%20collegato%20al%20sito%20archeologico%22%40it%20%3B%0A%20%20%20%20rdfs%3Acomment%20%22Collega%20direttamente%20un%20bene%20archeologico%20al%20sito%20gi%C3%A0%20raggiunto%20tramite%20la%20localizzazione%20indicizzata%20nel%20tempo%2C%20senza%20sostituire%20il%20pattern%20ArCo%20esistente.%22%40it%20%3B%0A%20%20%20%20rdfs%3Adomain%20arco%3AArchaeologicalProperty%20%3B%0A%20%20%20%20rdfs%3Arange%20cis%3ASite%20%3B%0A%20%20%20%20rdfs%3AsubPropertyOf%20dcterms%3Aspatial%20.%0A%20%20%3Fentity%20domus-onto%3AhasArchaeologicalContextSite%20%3Fsite%20.%0A%7D%0AWHERE%20%7B%0A%20%20VALUES%20%3Fsite%20%7B%20%3Chttps%3A%2F%2Fw3id.org%2Farco%2Fresource%2FSite%2F341671000c872aa799b1e99ae08ca1e8%3E%20%7D%0A%20%20%3Fentity%20a%20arco%3AArchaeologicalProperty%20%3B%20a-loc%3AhasTimeIndexedTypedLocation%20%3Flocation%20.%0A%20%20%3Flocation%20a%20a-loc%3ATimeIndexedTypedLocation%20%3B%20a-loc%3AatSite%20%3Fsite%20.%0A%7D&format=text%2Fturtle" target="_blank" rel="noopener">Esegui query e genera il Turtle</a>
+      <div class="result-sample" aria-label="Risultati della query CONSTRUCT Q7">
+        <div class="result-sample-head">
+          <span class="lbl">Output RDF effettivo</span>
+          <span class="result-count">12 triple · 7 di schema + 5 collegamenti</span>
+        </div>
+        <p class="small">I cinque collegamenti prodotti l'8 settembre 2026 sono riportati integralmente; le altre sette triple definiscono tipo, etichette, commento, dominio, codominio e super-proprietà del predicato locale.</p>
+        <div class="table-wrap">
+          <table class="results-table" aria-label="Collegamenti diretti generati dalla Q7">
+            <thead><tr><th scope="col">Soggetto</th><th scope="col">Predicato</th><th scope="col">Oggetto</th></tr></thead>
+            <tbody>
+              <tr><td class="result-uri"><a href="https://w3id.org/arco/resource/ArchaeologicalProperty/0800675608" target="_blank" rel="noopener"><code>ArchaeologicalProperty/0800675608</code></a></td><td><code>hasArchaeologicalContextSite</code></td><td class="result-uri"><a href="https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8" target="_blank" rel="noopener"><code>Site/341671…</code></a></td></tr>
+              <tr><td class="result-uri"><a href="https://w3id.org/arco/resource/ArchaeologicalProperty/0800675609" target="_blank" rel="noopener"><code>ArchaeologicalProperty/0800675609</code></a></td><td><code>hasArchaeologicalContextSite</code></td><td class="result-uri"><a href="https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8" target="_blank" rel="noopener"><code>Site/341671…</code></a></td></tr>
+              <tr><td class="result-uri"><a href="https://w3id.org/arco/resource/ArchaeologicalProperty/0800675610" target="_blank" rel="noopener"><code>ArchaeologicalProperty/0800675610</code></a></td><td><code>hasArchaeologicalContextSite</code></td><td class="result-uri"><a href="https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8" target="_blank" rel="noopener"><code>Site/341671…</code></a></td></tr>
+              <tr><td class="result-uri"><a href="https://w3id.org/arco/resource/ArchaeologicalProperty/0800675611" target="_blank" rel="noopener"><code>ArchaeologicalProperty/0800675611</code></a></td><td><code>hasArchaeologicalContextSite</code></td><td class="result-uri"><a href="https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8" target="_blank" rel="noopener"><code>Site/341671…</code></a></td></tr>
+              <tr><td class="result-uri"><a href="https://w3id.org/arco/resource/ArchaeologicalProperty/0800675612" target="_blank" rel="noopener"><code>ArchaeologicalProperty/0800675612</code></a></td><td><code>hasArchaeologicalContextSite</code></td><td class="result-uri"><a href="https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8" target="_blank" rel="noopener"><code>Site/341671…</code></a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="rescomment">
+        <span class="lbl">Commento ai risultati</span>
+        <p>Il blocco <code>WHERE</code> funziona come criterio probatorio: ammette esclusivamente risorse di tipo <code>arco:ArchaeologicalProperty</code> collegate alla Domus mediante una <code>a-loc:TimeIndexedTypedLocation</code> esplicita. Il template <code>CONSTRUCT</code> conserva il significato spaziale del legame, dichiarando la proprietà locale come sotto-proprietà di <code>dcterms:spatial</code>, e materializza cinque scorciatoie interrogative coerenti con il modello sorgente.</p>
+        <p>L'output è un nuovo grafo RDF di <strong>12 triple distinte</strong>: sette descrivono la proprietà e cinque collegano i beni al sito. La semantica insiemistica del grafo elimina automaticamente le dichiarazioni di schema duplicate prodotte dalle cinque soluzioni del <code>WHERE</code>. La query è quindi riproducibile e idempotente rispetto allo stesso stato dei dati. Non è una query <code>INSERT</code> o <code>UPDATE</code>: l'endpoint ArCo rimane invariato.</p>
+      </div>
+      <p class="back-link"><a href="#query-index" aria-label="Torna all'indice delle query">↑ Torna all'indice delle query</a></p>
+    </section>
+
   </main>
 
   <footer>
     <div class="footer-inner">
       <div><strong>Progetto Metodologie e Tecniche di Simulazione</strong> Università di Bologna<br>
-      <span class="small">Codice e materiali disponibili nel <a href="https://github.com/paracool/mts-unibo">repository GitHub</a>.</span></div>
+      <span class="small">Codice e materiali disponibili nel <a href="https://github.com/massimilianoricchiuti/Metodologie-e-Tecniche-di-Simulazione">repository GitHub</a>.</span></div>
       <div class="small">Sito statico pubblicato con GitHub Pages.</div>
     </div>
   </footer>
   <script src="main.js"></script>
 </body>
 </html>
-
-
 

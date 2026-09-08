@@ -1,5 +1,12 @@
 ASK {
-  <https://w3id.org/arco/resource/ArchaeologicalProperty/0800675608>
-    ?directProperty
-  <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8> .
+  VALUES ?entity {
+    <https://w3id.org/arco/resource/ArchaeologicalProperty/0800675608>
+    <https://w3id.org/arco/resource/ArchaeologicalProperty/0800675609>
+    <https://w3id.org/arco/resource/ArchaeologicalProperty/0800675610>
+    <https://w3id.org/arco/resource/ArchaeologicalProperty/0800675611>
+    <https://w3id.org/arco/resource/ArchaeologicalProperty/0800675612>
+  }
+
+  ?entity ?directProperty
+    <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8> .
 }
