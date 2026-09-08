@@ -70,6 +70,7 @@
           priva di collegamenti con la Domus. Il medico non emerge come persona o entità autonoma pertinente al progetto.</p>
         </li>
       </ol>
+      <div class="note"><strong>Passaggio successivo.</strong> Le Q1–Q6 costituiscono la fase di scoperta e verifica del gap. Solo dopo tale analisi, la <a href="sparql.html#q7">Q7 CONSTRUCT</a> riusa il pattern provato dalla Q3 come filtro di evidenza e materializza cinque collegamenti diretti bene–sito in un grafo locale separato, senza modificare ArCo e senza introdurre il corredo o Eutyches.</div>
     </section>
 
     <section id="gap">
@@ -103,7 +104,7 @@
         e di generarne una rappresentazione nell'ontologia ArCo. Il confronto fra le informazioni esterne richiamate dai modelli e
         ciò che è realmente nel grafo è terreno fertile per osservare allucinazioni e differenze di comportamento.
         I dettagli sono nella <a href="prompts.html">sezione Prompt e LLM</a>; la selezione delle sole affermazioni
-        sostenute dalle query e la loro traduzione finale sono documentate nella pagina
+        sostenute dalle query, la loro traduzione finale e la materializzazione mediante <code>CONSTRUCT</code> sono documentate nella pagina
         <a href="rdf.html">Arricchimento RDF</a>.
       </p>
     </section>
@@ -115,7 +116,7 @@
         <table>
           <thead><tr><th>Strumento</th><th>Scopo</th></tr></thead>
           <tbody>
-            <tr><td><a href="https://yasgui.org" target="_blank" rel="noopener">YASGUI</a></td><td>Scrittura ed esecuzione delle query SPARQL.</td></tr>
+            <tr><td><a href="https://yasgui.org" target="_blank" rel="noopener">YASGUI</a></td><td>Scrittura ed esecuzione delle query SPARQL <code>SELECT</code> e <code>CONSTRUCT</code>.</td></tr>
             <tr><td><a href="https://dati.cultura.gov.it/sparql" target="_blank" rel="noopener">Endpoint SPARQL di ArCo</a></td><td>Interrogazione del knowledge graph del patrimonio.</td></tr>
             <tr><td><a href="https://query.wikidata.org" target="_blank" rel="noopener">Wikidata Query Service</a></td><td>Dati di confronto sull'item Q3713399.</td></tr>
             <tr><td>Interfacce / API degli LLM</td><td>Esecuzione dei prompt (modelli elencati nella <a href="prompts.html">pagina dedicata</a>).</td></tr>
@@ -129,12 +130,10 @@
   <footer>
     <div class="footer-inner">
       <div><strong>Progetto Metodologie e Tecniche di Simulazione</strong> Università di Bologna<br>
-      <span class="small">Codice e materiali disponibili nel <a href="https://github.com/paracool/mts-unibo">repository GitHub</a>.</span></div>
+      <span class="small">Codice e materiali disponibili nel <a href="https://github.com/massimilianoricchiuti/Metodologie-e-Tecniche-di-Simulazione">repository GitHub</a>.</span></div>
       <div class="small">Sito statico realizzato per GitHub Pages.</div>
     </div>
   </footer>
   <script src="main.js"></script>
 </body>
 </html>
-
-
