@@ -51,7 +51,7 @@
           <tbody>
             <tr><td>Individuare e spiegare il gap</td><td><strong>Raggiunto.</strong> Il gap è descritto su quattro livelli e sostenuto dai risultati delle query.</td></tr>
             <tr><td>Valutare il contributo degli LLM</td><td><strong>Raggiunto.</strong> Due modelli sono stati confrontati lungo quattro prompt, distinguendo proposte plausibili e affermazioni non sostenute.</td></tr>
-            <tr><td>Produrre un arricchimento RDF difendibile</td><td><strong>Raggiunto in forma locale.</strong> La Q7 genera cinque collegamenti bene–sito a partire da percorsi ArCo già attestati.</td></tr>
+            <tr><td>Produrre un arricchimento RDF difendibile</td><td><strong>Raggiunto in forma locale.</strong> La Q7 genera cinque relazioni <code>arco-lite:hasFindingLocation</code> a partire da localizzazioni ArCo qualificate come luoghi di rinvenimento.</td></tr>
             <tr><td>Colmare l'intero gap della Domus in ArCo</td><td><strong>Non raggiunto.</strong> Corredo, Eutyches, descrizione del sito e frammentazione restano problemi aperti.</td></tr>
           </tbody>
         </table>
@@ -70,7 +70,7 @@
         </li>
         <li>
           <h3>2. Esplorazione incrementale di ArCo</h3>
-          <p>La <a href="methodology.html#gap-discovery">vocabulary discovery</a> parte dalla ricerca per etichetta: la <a href="sparql.html#q1">Q1</a> individua le risorse associate alla Domus; la <a href="sparql.html#q2">Q2</a> mostra relazioni entranti e uscenti; la <a href="sparql.html#q3">Q3</a> percorre il legame indiretto verso cinque beni. Le <a href="sparql.html#q4">Q4</a> e <a href="sparql.html#q5">Q5</a> cercano il corredo prima globalmente e poi nel namespace ArCo; la <a href="sparql.html#q6">Q6</a> verifica il nome Eutyches.</p>
+          <p>La <a href="methodology.html#gap-discovery">vocabulary discovery</a> parte dalla ricerca per etichetta: la <a href="sparql.html#q1">Q1</a> individua le risorse associate alla Domus; la <a href="sparql.html#q2">Q2</a> mostra relazioni entranti e uscenti; la <a href="sparql.html#q3">Q3</a> percorre il legame indiretto verso cinque beni e ne mostra la qualificazione <code>a-loc:FindingLocation</code>. Le <a href="sparql.html#q4">Q4</a> e <a href="sparql.html#q5">Q5</a> cercano il corredo prima globalmente e poi nel namespace ArCo; la <a href="sparql.html#q6">Q6</a> verifica il nome Eutyches.</p>
         </li>
         <li>
           <h3>3. Formalizzazione del gap</h3>
@@ -86,7 +86,7 @@
         </li>
         <li>
           <h3>6. Arricchimento e verifica</h3>
-          <p>La <a href="sparql.html#q7">Q7 CONSTRUCT</a> materializza i cinque collegamenti già provati; la pagina <a href="rdf.html">Arricchimento RDF</a> documenta la proprietà locale, le triple prodotte, il <a href="rdf/validation-report.md">report di validazione</a> e i limiti del risultato.</p>
+          <p>La <a href="sparql.html#q7">Q7 CONSTRUCT</a> materializza cinque relazioni <code>arco-lite:hasFindingLocation</code> dopo aver selezionato i luoghi di rinvenimento. La pagina <a href="rdf.html">Arricchimento RDF</a> documenta il riuso della proprietà ArCo Lite, le cinque triple, le <a href="rdf/evidence/q3-finding-locations-2026-09-10.json">evidenze della Q3</a> e il <a href="rdf/validation-report.md">report di validazione</a>.</p>
         </li>
       </ol>
       <div class="note"><strong>Strumenti.</strong> Le query sono state scritte ed eseguite con <a href="https://yasgui.org" target="_blank" rel="noopener">YASGUI</a> sull'<a href="https://dati.cultura.gov.it/sparql" target="_blank" rel="noopener">endpoint SPARQL di ArCo</a>; <a href="https://query.wikidata.org" target="_blank" rel="noopener">Wikidata Query Service</a> ha fornito dati di confronto sull'<a href="https://www.wikidata.org/wiki/Q3713399" target="_blank" rel="noopener">item Q3713399</a>; interfacce o API dei modelli sono state usate per i prompt; il sito è pubblicato con <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a>.</div>
@@ -101,8 +101,8 @@
           <thead><tr><th>Livello</th><th>Evidenza osservata</th><th>Conseguenza</th></tr></thead>
           <tbody>
             <tr><td><strong>Sito</strong></td><td>Il nodo della Domus espone soltanto tipo, indirizzo ed etichetta: mancano datazione, storia, descrizione e immagine.</td><td>La presenza del luogo nel grafo non equivale a una rappresentazione completa.</td></tr>
-            <tr><td><strong>Relazione</strong></td><td>Soltanto cinque beni sono raggiungibili attraverso <code>TimeIndexedTypedLocation</code>; non emerge un collegamento diretto sito↔bene.</td><td>La navigazione richiede il percorso ricostruito dalla <a href="sparql.html#q3">Q3</a>.</td></tr>
-            <tr><td><strong>Collezione / narrazione</strong></td><td>Le corrispondenze lessicali riguardano altri contesti o nodi di tipo ambigui; nessun URI è attribuibile al corredo della Domus ed Eutyches non emerge come persona collegata al sito.</td><td>Non esistono URI pertinenti da riusare per il corredo o per il medico.</td></tr>
+            <tr><td><strong>Relazione</strong></td><td>Soltanto cinque beni sono raggiungibili attraverso <code>TimeIndexedTypedLocation</code>; il controllo documentato non rileva relazioni dirette fra questi cinque beni e il sito in nessuna delle due direzioni.</td><td>La navigazione richiede il percorso ricostruito dalla <a href="sparql.html#q3">Q3</a>.</td></tr>
+            <tr><td><strong>Collezione / narrazione</strong></td><td>Le corrispondenze lessicali riguardano altri contesti o nodi di tipo ambigui; nessun URI è attribuibile al corredo della Domus ed Eutyches non emerge come persona collegata al sito.</td><td>Le query documentate non individuano URI pertinenti da riusare per il corredo o per il medico.</td></tr>
             <tr><td><strong>Frammentazione</strong></td><td>Lo stesso luogo compare con tre URI: il nodo ArCo e due record MiBACT–Luoghi collegati tramite <code>owl:sameAs</code>.</td><td>L'identità del sito è distribuita e il nodo da interrogare non è immediatamente evidente.</td></tr>
           </tbody>
         </table>
@@ -120,7 +120,7 @@
             <tr>
               <td><strong>Collegamento bene↔sito controintuitivo</strong></td>
               <td>Le relazioni dirette del sito mostrano nodi di localizzazione, non i reperti cui appartengono.</td>
-              <td>La <a href="sparql.html#q3">Q3</a> documenta il pattern <code>bene → TimeIndexedTypedLocation → Site</code>; la <a href="sparql.html#q7">Q7</a> lo usa per generare cinque collegamenti diretti nel grafo locale.</td>
+              <td>La <a href="sparql.html#q3">Q3</a> documenta il pattern <code>bene → TimeIndexedTypedLocation → Site</code>; la <a href="sparql.html#q7">Q7</a> richiede <code>hasLocationType a-loc:FindingLocation</code> e genera cinque relazioni <code>arco-lite:hasFindingLocation</code> nel grafo locale.</td>
             </tr>
             <tr>
               <td><strong>Frammentazione e duplicazione degli URI</strong></td>
@@ -164,13 +164,13 @@
     <section id="arricchimento">
       <h2><span class="num">06</span>Come abbiamo colmato il gap?</h2>
       <hr class="rule">
-      <p><strong>Lo abbiamo colmato solo nella componente di relazione bene–sito.</strong> Il file <a href="rdf/domus_enrichment.ttl"><code>rdf/domus_enrichment.ttl</code></a>, validato sintatticamente, contiene <strong>12 triple</strong>: sette definiscono la proprietà locale <a href="rdf/domus_enrichment.ttl"><code>hasArchaeologicalContextSite</code></a> e cinque collegano al <a href="https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8" target="_blank" rel="noopener">nodo ArCo della Domus</a> i beni individuati dalla Q3.</p>
-      <p>La proprietà specializza <a href="https://www.dublincore.org/specifications/dublin-core/dcmi-terms/terms/spatial/" target="_blank" rel="noopener"><code>dcterms:spatial</code></a> e affianca, senza sostituirli, i percorsi indiretti mostrati dalla <a href="sparql.html#q3">Q3</a>. La <a href="sparql.html#q7">Q7 CONSTRUCT</a> rigenera il medesimo grafo dalle relazioni presenti nell'endpoint. Non aggiunge Eutyches, il corredo chirurgico, temi o allineamenti esterni; non modifica il grafo ufficiale.</p>
+      <p><strong>Il risultato affronta il collegamento diretto con la sede di rinvenimento.</strong> Il file <a href="rdf/domus_enrichment.ttl"><code>rdf/domus_enrichment.ttl</code></a> contiene <strong>5 triple</strong>, tutte con il predicato <a href="https://github.com/ICCD-MiBACT/ArCo/blob/master/ArCo-release/ontologie/arco-lite/1.0/arco-lite.owl" target="_blank" rel="noopener"><code>arco-lite:hasFindingLocation</code></a>. Collega alla Domus i cinque beni individuati dalla Q3, per i quali ArCo documenta una localizzazione di tipo <code>a-loc:FindingLocation</code>.</p>
+      <p>La proprietà ArCo Lite viene riusata direttamente, senza uno schema locale aggiuntivo. La <a href="sparql.html#q7">Q7 CONSTRUCT</a> materializza la corrispondenza fra il pattern qualificato di localizzazione e la relazione di rinvenimento. I nodi intermedi restano la fonte per il ruolo e le eventuali informazioni temporali: la relazione diretta agevola le interrogazioni locali. Corredo chirurgico, Eutyches, temi e allineamenti esterni restano esclusi.</p>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Aspetto del gap</th><th>Risultato</th></tr></thead>
           <tbody>
-            <tr><td>Collegamento diretto bene–sito</td><td><strong>Affrontato per i cinque beni individuati dalla Q3.</strong> Le triple generate evitano il passaggio obbligato dai nodi di localizzazione nelle interrogazioni locali.</td></tr>
+            <tr><td>Collegamento diretto bene–sito</td><td><strong>Affrontato per i cinque beni individuati dalla Q3.</strong> Le cinque relazioni di rinvenimento evitano il passaggio obbligato dai nodi di localizzazione nelle interrogazioni locali.</td></tr>
             <tr><td>Corredo chirurgico della Domus</td><td><strong>Non colmato.</strong> Le <a href="sparql.html#q4">Q4</a> e <a href="sparql.html#q5">Q5</a> non offrono una risorsa attribuibile alla Domus.</td></tr>
             <tr><td>Medico Eutyches</td><td><strong>Non colmato.</strong> La <a href="sparql.html#q6">Q6</a> restituisce soltanto un titolo omonimo e non pertinente.</td></tr>
             <tr><td>Descrizione e frammentazione del sito</td><td><strong>Non modificate.</strong> La <a href="sparql.html#q2">Q2</a> documenta il problema, ma non fornisce nuovi valori da asserire.</td></tr>
@@ -180,7 +180,7 @@
       <div class="artifact-links">
         <a class="card" href="rdf.html"><span class="k">Spiegazione</span><span class="t">Arricchimento RDF</span><span class="d">Dai percorsi ArCo alle triple finali.</span></a>
         <a class="card" href="queries/query-eu-07-construct-collegamenti-diretti.rq"><span class="k">Generazione</span><span class="t">Query CONSTRUCT</span><span class="d">Il passaggio riproducibile dal pattern ArCo al sotto-grafo.</span></a>
-        <a class="card" href="rdf/domus_enrichment.ttl"><span class="k">Risultato</span><span class="t">Turtle finale</span><span class="d">Le dodici triple mantenute.</span></a>
+        <a class="card" href="rdf/domus_enrichment.ttl"><span class="k">Risultato</span><span class="t">Turtle finale</span><span class="d">Le cinque relazioni di rinvenimento.</span></a>
         <a class="card" href="rdf/validation-report.md"><span class="k">Controllo</span><span class="t">Validazione</span><span class="d">Parsing, conteggio e limiti.</span></a>
         <a class="card" href="sparql-checks/check-direct-artifact-site-link.rq"><span class="k">Verifica</span><span class="t">Query di controllo</span><span class="d">Controllo dei cinque legami diretti in ArCo.</span></a>
       </div>
@@ -191,14 +191,14 @@
       <h2><span class="num">07</span>Conclusioni e progetti futuri</h2>
       <hr class="rule">
       <p>L'indagine mostra che la presenza di una risorsa in un knowledge graph non garantisce una rappresentazione completa o facilmente interrogabile. Nel caso della Domus, un nodo minimale e una struttura intermedia rendono poco visibile il rapporto con i reperti; il corredo e il medico che definiscono l'identità storica del sito non emergono come entità pertinenti.</p>
-      <p>Il confronto con gli LLM conferma che un Turtle plausibile non è necessariamente attendibile. Il risultato finale è volutamente esiguo — una proprietà applicata a cinque coppie di URI già documentate — ma è leggibile, sintatticamente valido, semanticamente difendibile e riproducibile mediante la Q7.</p>
+      <p>Il confronto con gli LLM conferma che un Turtle plausibile richiede una verifica delle evidenze e dei vocabolari. Il risultato finale riusa <code>arco-lite:hasFindingLocation</code> per cinque coppie di URI con rinvenimento documentato. La scelta della proprietà e il filtro della Q7 derivano dal controllo dell’ontologia e dei dati; gli output originari dei modelli restano consultabili come materiale dell’esperimento. Le cinque triple sono riproducibili e non introducono nuovi fatti su corredo o medico.</p>
       <h3>Sviluppi coerenti con i limiti emersi</h3>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Progetto futuro</th><th>Base nei risultati attuali</th><th>Condizione di rigore</th></tr></thead>
           <tbody>
-            <tr><td><strong>Versionare il sotto-grafo derivato</strong></td><td>La <a href="sparql.html#q7">Q7</a> consente di rigenerare i collegamenti bene–sito dallo stato corrente di ArCo.</td><td>Registrare data, conteggio e differenze di ogni nuova esecuzione prima di sostituire il Turtle validato.</td></tr>
-            <tr><td><strong>Documentare corredo ed Eutyches</strong></td><td>Le <a href="sparql.html#q4">Q4</a> e <a href="sparql.html#q5">Q5</a>, insieme alla <a href="sparql.html#q6">Q6</a>, mostrano l'assenza di URI pertinenti.</td><td>Aggiungere nuove entità soltanto dopo aver reperito fonti catalografiche autorevoli e identificatori stabili.</td></tr>
+            <tr><td><strong>Versionare il sotto-grafo derivato</strong></td><td>La <a href="sparql.html#q7">Q7</a> consente di rigenerare i collegamenti bene–sito dallo stato corrente di ArCo.</td><td>Registrare data, risultati della Q3, tipo delle localizzazioni, conteggio e differenze prima di aggiornare il Turtle validato.</td></tr>
+            <tr><td><strong>Documentare corredo ed Eutyches</strong></td><td>Le <a href="sparql.html#q4">Q4</a> e <a href="sparql.html#q5">Q5</a>, insieme alla <a href="sparql.html#q6">Q6</a>, non individuano URI pertinenti nelle interrogazioni documentate.</td><td>Aggiungere nuove entità soltanto dopo aver reperito fonti catalografiche autorevoli e identificatori stabili.</td></tr>
             <tr><td><strong>Completare il nodo del sito e riconciliare gli URI</strong></td><td>Il <a href="methodology.html#gap">gap</a> documenta campi descrittivi mancanti e tre URI per lo stesso luogo.</td><td>Verificare ogni valore e ogni allineamento; non dedurre <code>owl:sameAs</code> dalla sola somiglianza.</td></tr>
             <tr><td><strong>Monitorare l'evoluzione di ArCo</strong></td><td>Il repository contiene <a href="https://github.com/massimilianoricchiuti/Metodologie-e-Tecniche-di-Simulazione/tree/main/sparql-checks" target="_blank" rel="noopener">query SPARQL di controllo</a> per legami, etichette, tipi e possibili allineamenti.</td><td>Rieseguire i controlli e aggiornare le conclusioni solo quando cambiano le evidenze del grafo.</td></tr>
           </tbody>
@@ -215,6 +215,7 @@
         <li><a href="https://w3id.org/arco" target="_blank" rel="noopener">ArCo Knowledge Graph</a> · <a href="https://dati.cultura.gov.it/sparql" target="_blank" rel="noopener">endpoint SPARQL</a></li>
         <li><a href="https://catalogo.beniculturali.it/detail/ArchaeologicalProperty/0800675608" target="_blank" rel="noopener">Scheda di catalogo del mosaico 0800675608</a></li>
         <li><a href="queries/query-eu-07-construct-collegamenti-diretti.rq">Query CONSTRUCT Q7</a> · <a href="rdf/domus_enrichment.ttl">Turtle finale</a> · <a href="rdf/validation-report.md">report di validazione</a> · <a href="rdf/domus_enrichment_experimental.ttl">output sperimentale</a></li>
+        <li><a href="https://github.com/ICCD-MiBACT/ArCo/blob/master/ArCo-release/ontologie/arco-lite/1.0/arco-lite.owl" target="_blank" rel="noopener"><code>arco-lite:hasFindingLocation</code></a> · <a href="https://github.com/ICCD-MiBACT/ArCo/blob/master/ArCo-release/ontologie/location/location.owl" target="_blank" rel="noopener">Ontologia Location: tipo di localizzazione</a></li>
         <li><a href="https://www.w3.org/TR/sparql11-query/" target="_blank" rel="noopener">SPARQL 1.1 Query Language — W3C</a> · <a href="https://yasgui.org" target="_blank" rel="noopener">YASGUI</a></li>
         <li><a href="https://www.promptingguide.ai" target="_blank" rel="noopener">Prompt Engineering Guide</a></li>
       </ul>

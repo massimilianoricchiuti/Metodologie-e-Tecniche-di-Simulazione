@@ -20,9 +20,9 @@ Gli output forniti per ChatGPT 5.5 extended e Gemini 3.5 extended non sono stati
 - `conclusions.html`: riunisce relazione, sfide, portata dell'arricchimento e sviluppi futuri.
 - `README.md`: aggiornata la struttura dei file e la checklist.
 - `LLM_INTEGRATION_SUMMARY.md`: aggiornata questa sintesi.
-- `rdf/domus_enrichment.ttl`: ridotto alla definizione minima della proprietà locale e ai soli collegamenti bene–sito sostenuti dalla [Q3](sparql.html#q3), poi estesi ai cinque beni mediante la Q7.
+- `rdf/domus_enrichment.ttl`: contiene cinque relazioni `arco-lite:hasFindingLocation`, generate dalla Q7 per le localizzazioni qualificate come luoghi di rinvenimento nella [Q3](sparql.html#q3). La proprietà è riusata direttamente da ArCo Lite.
 - `rdf/validation-report.md`: aggiornato con la funzione e il conteggio dei due Turtle mantenuti.
-- `sparql.html` e `queries/query-eu-07-construct-collegamenti-diretti.rq`: aggiunta la query `CONSTRUCT` che materializza nel grafo locale i cinque collegamenti bene–sito già dimostrati dalla Q3.
+- `sparql.html` e `queries/query-eu-07-construct-collegamenti-diretti.rq`: aggiornata la query `CONSTRUCT` con il filtro `a-loc:hasLocationType a-loc:FindingLocation`; materializza nel grafo locale cinque relazioni `arco-lite:hasFindingLocation`.
 
 ## File rimossi
 
@@ -32,6 +32,12 @@ Gli output forniti per ChatGPT 5.5 extended e Gemini 3.5 extended non sono stati
 
 ## Verifica
 
-- `rdf/domus_enrichment.ttl`: 12 triple, parsing riuscito con RDFLib; sette definiscono la proprietà locale e cinque sono generate dalla Q7.
+- `rdf/domus_enrichment.ttl`: 5 triple, parsing riuscito con RDFLib; tutte usano `arco-lite:hasFindingLocation` e coincidono con il risultato della Q7.
 - `rdf/domus_enrichment_experimental.ttl`: 113 triple, parsing riuscito con RDFLib; conservato soltanto come output dell'esperimento.
 - La nuova visualizzazione riusa colori, tipografia e componenti del sito.
+
+## Revisione del 10 settembre 2026
+
+La Q3 espone il tipo di localizzazione senza escludere i casi privi di qualificazione. I cinque casi verificati hanno valore `a-loc:FindingLocation`; la Q7 lo richiede nel `WHERE`. La scelta di `arco-lite:hasFindingLocation` deriva dal controllo dei dati e dell’ontologia, successivo all’esperimento LLM.
+
+Home, metodologia, query visualizzate ed eseguibili, pagina RDF, grafico, conclusioni, valutazioni dei prompt e conteggi descrivono questa soluzione. Il [registro dei prompt](prompts/README.md) e l’intestazione del Turtle sperimentale identificano i materiali storici: le risposte originarie non sono state riscritte attribuendo ai modelli la nuova scelta.

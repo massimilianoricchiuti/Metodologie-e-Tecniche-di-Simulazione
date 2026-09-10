@@ -60,7 +60,7 @@
       <h2><span class="num">02</span>Zero-shot</h2>
       <hr class="rule">
       <p>La prima fase precede la scrittura delle triple. Il modello deve classificare le informazioni in base alla loro forza probatoria e scartare ciò che l'input non consente di sostenere. Il testo eseguito è disponibile nel file <a href="prompts/prompt-A-zero-shot.txt"><code>prompt-A-zero-shot.txt</code></a>.</p>
-      <div class="note"><strong>Allineamento con le query aggiornate.</strong> I prompt e gli output sono documenti storici dell'esperimento e restano invariati. Le <a href="sparql.html#q4">Q4</a> e <a href="sparql.html#q5">Q5</a> restituiscono corrispondenze lessicali e nodi di tipo pertinenti, ma nessun URI attribuibile al corredo specifico della Domus. La <a href="sparql.html#q6">Q6</a> trova inoltre un titolo omonimo, ma non il medico Eutyches come persona collegata al sito.</div>
+      <div class="note"><strong>Allineamento con le query aggiornate.</strong> I prompt e gli output sono documenti storici dell’esperimento: le formulazioni originarie sono conservate. La verifica del 10 settembre 2026 ha accertato <code>a-loc:FindingLocation</code> per i cinque beni; il <a href="rdf.html#soluzione">risultato finale</a> riusa ora <code>arco-lite:hasFindingLocation</code>. Le proprietà locali presenti negli estratti descrivono proposte dell’esperimento, non il modello finale; il <a href="prompts/README.md">registro dei prompt</a> chiarisce questa distinzione. Le <a href="sparql.html#q4">Q4</a> e <a href="sparql.html#q5">Q5</a> restituiscono corrispondenze lessicali e nodi di tipo pertinenti, ma nessun URI attribuibile al corredo specifico della Domus. La <a href="sparql.html#q6">Q6</a> trova inoltre un titolo omonimo, ma non il medico Eutyches come persona collegata al sito.</div>
 
       <details class="note">
         <summary><strong>Leggi il prompt eseguito</strong></summary>
@@ -152,7 +152,7 @@ Avvertenza metodologica:
     <section id="few-shot">
       <h2><span class="num">03</span>Few-shot: tradurre le proposte in RDF</h2>
       <hr class="rule">
-      <p>La seconda fase usa esempi positivi e vincoli espliciti per ottenere Turtle minimale. Il <a href="prompts/prompt-B-few-shot.txt">prompt B</a> parla di un collegamento RDF mancante; alla luce della <a href="sparql.html#q3">Q3</a>, la lettura corretta è più circoscritta: il collegamento esiste già in forma indiretta e la proposta serve a renderlo più agevole da interrogare.</p>
+      <p>La seconda fase usa esempi positivi e vincoli espliciti per ottenere Turtle minimale. Il <a href="prompts/prompt-B-few-shot.txt">prompt B</a> parla di un collegamento RDF mancante; alla luce della <a href="sparql.html#q3">Q3</a>, la lettura corretta è più circoscritta: il collegamento esiste già in forma indiretta. La Q3 aggiornata ne rende esplicito il ruolo di rinvenimento; la soluzione finale lo materializza con <code>arco-lite:hasFindingLocation</code>.</p>
 
       <details class="note">
         <summary><strong>Leggi il prompt eseguito</strong></summary>
@@ -250,7 +250,7 @@ domus:assertion-0800675608-provenance a domus-onto:EnrichmentAssertion ;
         </tbody>
       </table></div>
 
-      <div class="note"><strong>Esito.</strong> Si conserva soltanto l'idea di un collegamento diretto bene–sito. Eutyches, il corredo e l'allineamento Wikidata non entrano nel risultato perché le <a href="sparql.html">query documentate</a> non forniscono le risorse e le relazioni necessarie.</div>
+      <div class="note"><strong>Esito.</strong> L’idea del collegamento diretto bene–sito viene realizzata con <code>arco-lite:hasFindingLocation</code> dopo la verifica del tipo delle localizzazioni. Le definizioni locali degli output B appartengono alla fase sperimentale. Eutyches, il corredo e l'allineamento Wikidata non entrano nel risultato perché le <a href="sparql.html">query documentate</a> non forniscono le risorse e le relazioni necessarie.</div>
     </section>
 
     <section id="ragionamento-strutturato">
@@ -367,7 +367,7 @@ Rischi dichiarati:
       <h2><span class="num">05</span>Validazione: distinguere sintassi e verità</h2>
       <hr class="rule">
       <p>L'<a href="prompts/prompt-D-validation.txt">ultimo prompt</a> controlla il Turtle originariamente prodotto, conservato come <a href="rdf/domus_enrichment_experimental.ttl"><code>rdf/domus_enrichment_experimental.ttl</code></a>. Un file sintatticamente valido può contenere relazioni non dimostrate: parsing e validazione semantica sono quindi due verifiche diverse.</p>
-      <p class="small">Le query di controllo restano consultabili come parte dell'esperimento: <a href="sparql-checks/check-direct-artifact-site-link.rq">legame diretto bene–sito</a>, <a href="sparql-checks/check-eutyches-labels.rq">occorrenze del nome Eutyches</a>, <a href="sparql-checks/check-existing-subjects-domus.rq">temi già collegati alla Domus</a>, <a href="sparql-checks/check-site-types.rq">tipi del sito</a>, <a href="sparql-checks/check-surgical-instruments-labels.rq">etichette del corredo</a> e <a href="sparql-checks/check-wikidata-sameas.rq">allineamento Wikidata</a>.</p>
+      <p class="small">Le query di controllo restano consultabili e il <a href="rdf/validation-report.md">report</a> distingue i controlli correnti dagli output storici: <a href="sparql-checks/check-direct-artifact-site-link.rq">legame diretto bene–sito</a>, <a href="sparql-checks/check-eutyches-labels.rq">occorrenze del nome Eutyches</a>, <a href="sparql-checks/check-existing-subjects-domus.rq">temi già collegati alla Domus</a>, <a href="sparql-checks/check-site-types.rq">tipi del sito</a>, <a href="sparql-checks/check-surgical-instruments-labels.rq">etichette del corredo</a> e <a href="sparql-checks/check-wikidata-sameas.rq">allineamento Wikidata</a>.</p>
 
       <details class="note">
         <summary><strong>Leggi il prompt eseguito</strong></summary>
@@ -465,7 +465,7 @@ della pubblicazione della risorsa locale.</code></pre></figure>
         <tbody>
           <tr><td>Parsing</td><td>Conferma 113 triple e dieci prefissi utilizzati.</td><td>Giudica valida la sintassi.</td><td>Il Turtle è sintatticamente valido; questa verifica non riguarda la verità delle asserzioni.</td></tr>
           <tr><td><code>FindGroup</code></td><td>Propone <code>l0:Collection</code>.</td><td>Propone <code>l0:Collection</code> o, più genericamente, <code>l0:Entity</code>.</td><td><code>l0:Collection</code> sarebbe la correzione più informativa, ma il corredo non entra nel Turtle finale.</td></tr>
-          <tr><td>Relazione bene–sito</td><td>Osserva che “provenienza” è più forte di “localizzazione”.</td><td>La considera sostenibile sulla base di dominio, range e reificazione.</td><td>Nel <a href="rdf.html#soluzione">Turtle finale</a> si usa il più neutro “collegamento al contesto archeologico”.</td></tr>
+          <tr><td>Relazione bene–sito</td><td>Osserva che “provenienza” è più forte di “localizzazione”.</td><td>La considera sostenibile sulla base di dominio, range e reificazione.</td><td>La <a href="sparql.html#q3">Q3 aggiornata</a> documenta <code>a-loc:FindingLocation</code> per tutti e cinque i beni. Il <a href="rdf.html#soluzione">Turtle finale</a> riusa quindi <code>arco-lite:hasFindingLocation</code>; il filtro della Q7 rende controllabile la qualificazione del rinvenimento.</td></tr>
           <tr><td>Temi del sito</td><td>Rileva un uso semanticamente improprio di <code>a-cd:hasSubject</code> e propone <code>dcterms:subject</code>.</td><td>Rileva il problema, ma lo motiva con un vincolo di dominio non confermato dall'ontologia.</td><td>La correzione sarebbe necessaria, ma i temi sono esclusi perché non sostenuti dall'input SPARQL.</td></tr>
           <tr><td>Eutyches e corredo</td><td>Distingue correttezza strutturale e attendibilità del contenuto.</td><td>Ne segnala la necessità di verifica e corregge la collocazione dei metadati.</td><td>Escluderli dal Turtle finale: le <a href="sparql.html#q4">Q4</a> e <a href="sparql.html#q5">Q5</a> non individuano una risorsa attribuibile al corredo della Domus; la <a href="sparql.html#q6">Q6</a> non identifica il medico pertinente.</td></tr>
           <tr><td><code>owl:sameAs</code></td><td>Propone temporaneamente <code>rdfs:seeAlso</code>.</td><td>Lo considera corretto, ma da verificare.</td><td>Escludere <code>owl:sameAs</code> finché non è dimostrata l'identità delle entità denotate.</td></tr>
@@ -497,7 +497,7 @@ della pubblicazione della risorsa locale.</code></pre></figure>
     <section id="errori">
       <h2><span class="num">07</span>Errori, eccessi e limiti riconosciuti</h2>
       <hr class="rule">
-      <p>Le risposte hanno aiutato a formulare il problema, ma hanno anche mostrato errori riconoscibili. Il controllo finale ha eliminato dal <a href="rdf.html">risultato RDF</a> tutto ciò che non discende dalle <a href="sparql.html">query eseguite</a>.</p>
+      <p>Le risposte hanno aiutato a formulare il problema e a riconoscere gli errori. Il controllo finale ha escluso dal <a href="rdf.html">risultato RDF</a> le asserzioni non sostenute dalle <a href="sparql.html">query</a>. La selezione di <code>arco-lite:hasFindingLocation</code> deriva dalla verifica del vocabolario e di <code>hasLocationType</code>, successiva agli output qui riportati.</p>
 
       <div class="table-wrap"><table>
         <thead><tr><th>Errore o eccesso</th><th>Perché è un problema</th><th>Come è stato gestito</th></tr></thead>

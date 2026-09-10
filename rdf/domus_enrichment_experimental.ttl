@@ -1,3 +1,11 @@
+# ARCHIVIO DELL’ESPERIMENTO — PROPOSTE ORIGINARIE, NON RISULTATO FINALE
+# Le triple sottostanti conservano gli output sottoposti a validazione,
+# comprese le proposte successivamente escluse o superate.
+# Etichette quali "Accepted triples" riportano lo stato dell’output originario.
+# Il risultato vigente è domus_enrichment.ttl: 5 triple con
+# arco-lite:hasFindingLocation, generate dalla Q7 sul rinvenimento qualificato.
+# Vedere validation-report.md e ../prompts/README.md.
+
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .

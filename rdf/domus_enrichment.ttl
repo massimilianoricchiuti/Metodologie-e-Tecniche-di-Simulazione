@@ -1,41 +1,28 @@
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix dcterms: <http://purl.org/dc/terms/> .
-@prefix cis: <http://dati.beniculturali.it/cis/> .
-@prefix arco: <https://w3id.org/arco/ontology/arco/> .
-@prefix domus-onto: <https://massimilianoricchiuti.github.io/gepid-domus-chirurgo/ontology/> .
+@prefix arco-lite: <https://w3id.org/arco/ontology/arco-lite/> .
 
-#################################################################
-# Arricchimento finale
-# I collegamenti esplicitano in forma diretta le relazioni già
-# documentate dalla query Q3 attraverso il pattern di
-# localizzazione ArCo e materializzate dalla query CONSTRUCT Q7.
-#################################################################
-
-domus-onto:hasArchaeologicalContextSite a rdf:Property ;
-  rdfs:label "has archaeological context site"@en ,
-             "è collegato al sito archeologico"@it ;
-  rdfs:comment "Collega direttamente un bene archeologico al sito già raggiunto tramite la localizzazione indicizzata nel tempo, senza sostituire il pattern ArCo esistente."@it ;
-  rdfs:domain arco:ArchaeologicalProperty ;
-  rdfs:range cis:Site ;
-  rdfs:subPropertyOf dcterms:spatial .
+# Arricchimento finale: cinque relazioni di rinvenimento.
+# La Q7 le materializza dalle localizzazioni ArCo esplicitamente
+# qualificate con a-loc:hasLocationType a-loc:FindingLocation.
+# La proprietà è riusata da ArCo Lite, senza ridefinizioni locali.
+# Query generatrice: ../queries/query-eu-07-construct-collegamenti-diretti.rq
+# Evidenze e data di verifica: validation-report.md
 
 <https://w3id.org/arco/resource/ArchaeologicalProperty/0800675608>
-  domus-onto:hasArchaeologicalContextSite
+  arco-lite:hasFindingLocation
   <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8> .
 
 <https://w3id.org/arco/resource/ArchaeologicalProperty/0800675609>
-  domus-onto:hasArchaeologicalContextSite
+  arco-lite:hasFindingLocation
   <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8> .
 
 <https://w3id.org/arco/resource/ArchaeologicalProperty/0800675610>
-  domus-onto:hasArchaeologicalContextSite
+  arco-lite:hasFindingLocation
   <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8> .
 
 <https://w3id.org/arco/resource/ArchaeologicalProperty/0800675611>
-  domus-onto:hasArchaeologicalContextSite
+  arco-lite:hasFindingLocation
   <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8> .
 
 <https://w3id.org/arco/resource/ArchaeologicalProperty/0800675612>
-  domus-onto:hasArchaeologicalContextSite
+  arco-lite:hasFindingLocation
   <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8> .

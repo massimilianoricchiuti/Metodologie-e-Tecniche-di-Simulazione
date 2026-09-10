@@ -53,8 +53,7 @@
           <h3><a href="sparql.html#q3">Dai nodi di localizzazione ai beni</a></h3>
           <p>La query percorre il pattern
           <code>bene → hasTimeIndexedTypedLocation → TimeIndexedTypedLocation → atSite → Site</code>
-          e raggiunge cinque beni: un mosaico, un bacile, un capitello corinzio, una vasca e un frammento di statua di Ermarco.
-          Nessuno appartiene al corredo chirurgico.</p>
+          e raggiunge cinque beni: un mosaico, un bacile, un capitello corinzio, una vasca e un frammento di statua di Ermarco. La Q3 mostra anche <code>hasLocationType</code>: tutte e cinque le localizzazioni hanno valore <code>a-loc:FindingLocation</code>, cioè luogo di reperimento. Nessuno dei risultati identifica il corredo chirurgico.</p>
         </li>
         <li>
           <h3><a href="sparql.html#q4">Ricerca globale del corredo</a></h3>
@@ -70,7 +69,7 @@
           priva di collegamenti con la Domus. Il medico non emerge come persona o entità autonoma pertinente al progetto.</p>
         </li>
       </ol>
-      <div class="note"><strong>Passaggio successivo.</strong> Le Q1–Q6 costituiscono la fase di scoperta e verifica del gap. Solo dopo tale analisi, la <a href="sparql.html#q7">Q7 CONSTRUCT</a> riusa il pattern provato dalla Q3 come filtro di evidenza e materializza cinque collegamenti diretti bene–sito in un grafo locale separato, senza modificare ArCo e senza introdurre il corredo o Eutyches.</div>
+      <div class="note"><strong>Passaggio successivo.</strong> Le Q1–Q6 costituiscono la fase di scoperta e verifica del gap. La Q3 espone il tipo di localizzazione senza usarlo come filtro; la <a href="sparql.html#q7">Q7 CONSTRUCT</a> richiede invece <code>a-loc:hasLocationType a-loc:FindingLocation</code> e materializza cinque relazioni <code>arco-lite:hasFindingLocation</code>. L’arricchimento riusa una proprietà ArCo Lite e produce un grafo locale di cinque triple. L’endpoint ufficiale, il corredo ed Eutyches non vengono modificati.</div>
     </section>
 
     <section id="gap">
@@ -82,7 +81,7 @@
           <thead><tr><th>Livello</th><th>Cosa abbiamo osservato</th></tr></thead>
           <tbody>
             <tr><td><strong>Sito</strong></td><td>Il nodo del sito è quasi vuoto: solo tipo, indirizzo ed etichetta. Nessuna datazione, storia, descrizione o immagine per uno dei siti romani più noti d'Italia.</td></tr>
-            <tr><td><strong>Relazione</strong></td><td>Dal sito si raggiungono solo 5 beni attraverso il nodo intermedio <code>TimeIndexedTypedLocation</code>; non esiste un collegamento diretto sito↔bene.</td></tr>
+            <tr><td><strong>Relazione</strong></td><td>Dal sito si raggiungono solo 5 beni attraverso il nodo intermedio <code>TimeIndexedTypedLocation</code>; il controllo documentato non rileva un collegamento diretto fra questi cinque beni e il sito in nessuna delle due direzioni.</td></tr>
             <tr><td><strong>Collezione / narrazione</strong></td><td>Le query restituiscono corrispondenze lessicali e nodi di tipo non attribuibili al corredo specifico della Domus; Eutyches non emerge come persona collegata al sito.</td></tr>
             <tr><td><strong>Frammentazione</strong></td><td>Tre URI per lo stesso luogo, riconciliati solo da <code>owl:sameAs</code> fra ArCo e i due record MiBACT–Luoghi.</td></tr>
           </tbody>

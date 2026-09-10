@@ -187,15 +187,15 @@
         L'esplorazione progressiva dell'endpoint ha mostrato una realtà più complessa delle attese:
         il sito esiste nel grafo, ma è un nodo quasi vuoto, con pochissime proprietà, nessuna descrizione
         e nessuna datazione. Cinque reperti minori risultano collegati soltanto in modo indiretto,
-        attraverso una localizzazione <em>alternativa</em>. Le <a href="sparql.html#q4">ricerche sul corredo</a> restituiscono
+        attraverso una localizzazione <em>alternativa</em>, qualificata come luogo di rinvenimento. Le <a href="sparql.html#q4">ricerche sul corredo</a> restituiscono
         corrispondenze lessicali estranee al caso di studio, ma nessun URI attribuibile al corredo della Domus; <a href="sparql.html#q6">Eutyches</a> non emerge come
         persona collegata al sito, bensì soltanto in un titolo omonimo non pertinente.
         Questo è il <em>gap</em> documentato dal progetto.
       </p>
       <p>
         Dopo le sei interrogazioni di analisi, una <a href="sparql.html#q7">query <code>CONSTRUCT</code></a>
-        riusa il percorso di localizzazione già attestato in ArCo per generare un sotto-grafo locale con cinque
-        collegamenti diretti fra i beni catalogati e la Domus. La trasformazione migliora l'interrogabilità senza
+        seleziona le localizzazioni qualificate come <code>a-loc:FindingLocation</code> e genera un sotto-grafo locale di cinque
+        triple <code>arco-lite:hasFindingLocation</code> fra i beni catalogati e la Domus come sede di rinvenimento. La trasformazione migliora l'interrogabilità senza
         modificare l'endpoint sorgente e senza creare risorse non sostenute dalle evidenze.
       </p>
       <p>

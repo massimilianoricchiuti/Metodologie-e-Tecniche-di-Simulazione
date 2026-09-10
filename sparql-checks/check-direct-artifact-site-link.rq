@@ -7,6 +7,10 @@ ASK {
     <https://w3id.org/arco/resource/ArchaeologicalProperty/0800675612>
   }
 
-  ?entity ?directProperty
-    <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8> .
+  VALUES ?site {
+    <https://w3id.org/arco/resource/Site/341671000c872aa799b1e99ae08ca1e8>
+  }
+  { ?entity ?directProperty ?site . }
+  UNION
+  { ?site ?directProperty ?entity . }
 }

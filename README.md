@@ -17,8 +17,8 @@ HTML/CSS/JS puro, senza build — pronto per **GitHub Pages**.
 | `conclusions.html` | Esito, workflow, gap, sfide, conclusioni e sviluppi futuri |
 | `styles.css` | Foglio di stile condiviso |
 | `main.js` | Menu mobile accessibile, chiusura da tastiera ed evidenziazione della pagina corrente |
-| `prompts/` | I quattro prompt inviati agli LLM (A zero-shot, B few-shot, C CoT, D validazione) |
-| `rdf/` | `domus_enrichment.ttl` (risultato finale, 12 triple), output sperimentale e report di validazione |
+| `prompts/` | I quattro prompt originari (A zero-shot, B few-shot, C CoT, D validazione) e il registro che ne distingue la funzione storica dalla soluzione vigente |
+| `rdf/` | `domus_enrichment.ttl` (5 triple con `arco-lite:hasFindingLocation`), output sperimentale, evidenze della Q3 e report di validazione |
 | `sparql-checks/` | Query SPARQL di controllo sull'arricchimento proposto |
 
 ## Stato dei requisiti
@@ -30,9 +30,15 @@ HTML/CSS/JS puro, senza build — pronto per **GitHub Pages**.
 - [x] Pagina con tutte le query SPARQL + estratti effettivi, conteggi e commenti coerenti con gli output
 - [x] Pagina conclusiva unica con workflow, discussione delle sfide, esito e sviluppi futuri
 - [x] Query `SELECT` con OPTIONAL, DISTINCT, UNION, FILTER, REGEX, LIMIT e ORDER BY
-- [x] Query `CONSTRUCT` riproducibile che genera il sotto-grafo RDF locale dei cinque collegamenti bene–sito
+- [x] Query `CONSTRUCT` riproducibile che genera il sotto-grafo RDF locale delle cinque relazioni di rinvenimento con `arco-lite:hasFindingLocation`
 - [x] Link a entità esterne navigabili (Wikipedia, Wikidata, ArCo, catalogo)
 - [x] Le 3 tecniche di prompting con prompt reali (zero-shot, few-shot, chain-of-thought) → `prompts.html`, `prompts/`
 - [x] Confronto di ≥2 LLM (ChatGPT 5.5 extended, Gemini 3.5 extended) → `prompts.html`
 - [x] Pagina separata di arricchimento RDF, Turtle finale e validazione → `rdf.html`, `rdf/`
 - [x] Codice e materiali nel repository GitHub
+
+## Modellazione del rinvenimento
+
+La [Q3](queries/query-eu-03-beni-arco-filtrati.rq) mostra il tipo delle localizzazioni tramite `OPTIONAL`: per i cinque beni della Domus è `a-loc:FindingLocation`. La [Q7](queries/query-eu-07-construct-collegamenti-diretti.rq) richiede esplicitamente questo valore e genera soltanto `?entity arco-lite:hasFindingLocation ?site`. Il Turtle finale contiene cinque triple di dati e riusa la proprietà ufficiale senza uno schema locale.
+
+La [pagina RDF](rdf.html) motiva la scelta; il [report di validazione](rdf/validation-report.md) e i [risultati Q3 del 10 settembre 2026](rdf/evidence/q3-finding-locations-2026-09-10.json) ne documentano le evidenze. I [prompt originali](prompts/README.md) e il Turtle sperimentale mantengono le formulazioni storiche, con la loro funzione esplicitata.

@@ -1,0 +1,112 @@
+{
+  "head": {
+    "link": [],
+    "vars": [
+      "entity",
+      "label",
+      "location",
+      "locationType"
+    ]
+  },
+  "results": {
+    "distinct": false,
+    "ordered": true,
+    "bindings": [
+      {
+        "entity": {
+          "type": "uri",
+          "value": "https://w3id.org/arco/resource/ArchaeologicalProperty/0800675608"
+        },
+        "label": {
+          "type": "literal",
+          "xml:lang": "it",
+          "value": "mosaico (metà/ metà II-III)"
+        },
+        "location": {
+          "type": "uri",
+          "value": "https://w3id.org/arco/resource/TimeIndexedTypedLocation/0800675608-alternative-1"
+        },
+        "locationType": {
+          "type": "uri",
+          "value": "https://w3id.org/arco/ontology/location/FindingLocation"
+        }
+      },
+      {
+        "entity": {
+          "type": "uri",
+          "value": "https://w3id.org/arco/resource/ArchaeologicalProperty/0800675609"
+        },
+        "label": {
+          "type": "literal",
+          "xml:lang": "it",
+          "value": "bacile (prima metà III)"
+        },
+        "location": {
+          "type": "uri",
+          "value": "https://w3id.org/arco/resource/TimeIndexedTypedLocation/0800675609-alternative-1"
+        },
+        "locationType": {
+          "type": "uri",
+          "value": "https://w3id.org/arco/ontology/location/FindingLocation"
+        }
+      },
+      {
+        "entity": {
+          "type": "uri",
+          "value": "https://w3id.org/arco/resource/ArchaeologicalProperty/0800675610"
+        },
+        "label": {
+          "type": "literal",
+          "xml:lang": "it",
+          "value": "capitello corinzio (opera parietale) (metà/ metà II-III)"
+        },
+        "location": {
+          "type": "uri",
+          "value": "https://w3id.org/arco/resource/TimeIndexedTypedLocation/0800675610-alternative-1"
+        },
+        "locationType": {
+          "type": "uri",
+          "value": "https://w3id.org/arco/ontology/location/FindingLocation"
+        }
+      },
+      {
+        "entity": {
+          "type": "uri",
+          "value": "https://w3id.org/arco/resource/ArchaeologicalProperty/0800675611"
+        },
+        "label": {
+          "type": "literal",
+          "xml:lang": "it",
+          "value": "vasca (prima metà III)"
+        },
+        "location": {
+          "type": "uri",
+          "value": "https://w3id.org/arco/resource/TimeIndexedTypedLocation/0800675611-alternative-1"
+        },
+        "locationType": {
+          "type": "uri",
+          "value": "https://w3id.org/arco/ontology/location/FindingLocation"
+        }
+      },
+      {
+        "entity": {
+          "type": "uri",
+          "value": "https://w3id.org/arco/resource/ArchaeologicalProperty/0800675612"
+        },
+        "label": {
+          "type": "literal",
+          "xml:lang": "it",
+          "value": "Ermarco (statua/ maschile, piede) (prima metà III)"
+        },
+        "location": {
+          "type": "uri",
+          "value": "https://w3id.org/arco/resource/TimeIndexedTypedLocation/0800675612-alternative-1"
+        },
+        "locationType": {
+          "type": "uri",
+          "value": "https://w3id.org/arco/ontology/location/FindingLocation"
+        }
+      }
+    ]
+  }
+}
